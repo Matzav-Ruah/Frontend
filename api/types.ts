@@ -1,5 +1,5 @@
 export interface CsrfTokenResponse {
-  csrfToken: string;
+  csrftoken: string;
 }
 
 export interface SignInSchema {
@@ -50,9 +50,3 @@ export interface ApiRequestOptions {
 export interface LoginCredentials extends SignInSchema { }
 
 export interface RegisterCredentials extends SignInSchema { }
-
-export interface AuthState {
-  user: UserSchema | null;
-  isAuthenticated: boolean;
-  csrfToken: string | null;
-}

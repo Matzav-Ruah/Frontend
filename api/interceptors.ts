@@ -8,14 +8,6 @@ apiClient.interceptors.request.use(
     if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(config.method?.toUpperCase() || '')) {
       let csrfToken = await getCsrfToken();
 
-      if (!csrfToken && config.url !== API_CONFIG.ENDPOINTS.AUTH.CSRF_TOKEN) {
-        try {
-          csrfToken = await fetchCsrfToken();
-        } catch (error) {
-          console.error('Failed to fetch CSRF token:', error);
-        }
-      }
-
       if (csrfToken && config.headers) {
         config.headers[API_CONFIG.CSRF.HEADER_NAME] = csrfToken;
       }

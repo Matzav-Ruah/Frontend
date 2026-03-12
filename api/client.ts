@@ -13,12 +13,10 @@ export const apiClient: AxiosInstance = axios.create({
   withCredentials: true,
 });
 
-const CSRF_TOKEN_KEY = '@csrf_token';
-const USER_KEY = '@user_data';
-
 export const getCsrfToken = async (): Promise<string | null> => {
   try {
-    return await AsyncStorage.getItem(CSRF_TOKEN_KEY);
+    const token = await AsyncStorage.getItem(API_CONFIG.STORAGE_KEYS.CSRF_TOKEN);
+    return token ? token : await fetchCsrfToken();
   } catch (error) {
     console.error('Error getting CSRF token:', error);
     return null;
@@ -27,7 +25,7 @@ export const getCsrfToken = async (): Promise<string | null> => {
 
 export const setCsrfToken = async (token: string): Promise<void> => {
   try {
-    await AsyncStorage.setItem(CSRF_TOKEN_KEY, token);
+    await AsyncStorage.setItem(API_CONFIG.STORAGE_KEYS.CSRF_TOKEN, token);
   } catch (error) {
     console.error('Error saving CSRF token:', error);
   }
@@ -35,7 +33,7 @@ export const setCsrfToken = async (token: string): Promise<void> => {
 
 export const removeCsrfToken = async (): Promise<void> => {
   try {
-    await AsyncStorage.removeItem(CSRF_TOKEN_KEY);
+    await AsyncStorage.removeItem(API_CONFIG.STORAGE_KEYS.CSRF_TOKEN);
   } catch (error) {
     console.error('Error removing CSRF token:', error);
   }
@@ -43,7 +41,7 @@ export const removeCsrfToken = async (): Promise<void> => {
 
 export const getUser = async (): Promise<UserSchema | null> => {
   try {
-    const userJson = await AsyncStorage.getItem(USER_KEY);
+    const userJson = await AsyncStorage.getItem(API_CONFIG.STORAGE_KEYS.USER);
     return userJson ? JSON.parse(userJson) : null;
   } catch (error) {
     console.error('Error getting user:', error);
@@ -53,7 +51,7 @@ export const getUser = async (): Promise<UserSchema | null> => {
 
 export const setUser = async (user: UserSchema): Promise<void> => {
   try {
-    await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
+    await AsyncStorage.setItem(API_CONFIG.STORAGE_KEYS.USER, JSON.stringify(user));
   } catch (error) {
     console.error('Error saving user:', error);
   }
@@ -61,7 +59,7 @@ export const setUser = async (user: UserSchema): Promise<void> => {
 
 export const removeUser = async (): Promise<void> => {
   try {
-    await AsyncStorage.removeItem(USER_KEY);
+    await AsyncStorage.removeItem(API_CONFIG.STORAGE_KEYS.USER);
   } catch (error) {
     console.error('Error removing user:', error);
   }
@@ -76,7 +74,7 @@ export const fetchCsrfToken = async (): Promise<string> => {
   const response = await apiClient.get<CsrfTokenResponse>(
     API_CONFIG.ENDPOINTS.AUTH.CSRF_TOKEN
   );
-  const token = response.data.csrfToken;
+  const token = response.data.csrftoken;
   await setCsrfToken(token);
   return token;
 };
