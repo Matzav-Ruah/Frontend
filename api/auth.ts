@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+import { apiClient, clearAuthData } from './client';
 import {
   ApiResponse,
   LoginCredentials,
@@ -6,68 +6,41 @@ import {
   UserSchema,
 } from './types';
 import { API_CONFIG } from './config';
-import {
-  setUser,
-  removeUser,
-  getCsrfToken,
-  removeCsrfToken,
-} from './client';
+import { setUser } from './client';
+import "./interceptors";
 
 export const login = async (
   credentials: LoginCredentials
 ): Promise<ApiResponse<UserSchema>> => {
-  const csrfToken = await getCsrfToken();
-  if (!csrfToken) {
-    await apiClient.get(API_CONFIG.ENDPOINTS.AUTH.CSRF_TOKEN);
-  }
-
   const response = await apiClient.post<ApiResponse<UserSchema>>(
     API_CONFIG.ENDPOINTS.AUTH.LOGIN,
     credentials
   );
 
-  if (response.data.success && response.data.data) {
-    await setUser(response.data.data);
-  }
-
+  if (response.data.success && response.data.data) await setUser(response.data.data);
   return response.data;
 };
 
 export const register = async (
   credentials: RegisterCredentials
 ): Promise<ApiResponse<UserSchema>> => {
-  const csrfToken = await getCsrfToken();
-  if (!csrfToken) {
-    await apiClient.get(API_CONFIG.ENDPOINTS.AUTH.CSRF_TOKEN);
-  }
-
   const response = await apiClient.post<ApiResponse<UserSchema>>(
     API_CONFIG.ENDPOINTS.AUTH.REGISTER,
     credentials
   );
 
-  if (response.data.success && response.data.data) {
-    await setUser(response.data.data);
-  }
-
+  if (response.data.success && response.data.data) await setUser(response.data.data);
   return response.data;
 };
 
 export const logout = async (): Promise<ApiResponse<void>> => {
-  try {
-    const response = await apiClient.post<ApiResponse<void>>(
-      API_CONFIG.ENDPOINTS.AUTH.LOGOUT
-    );
+  const response = await apiClient.post<ApiResponse<void>>(
+    API_CONFIG.ENDPOINTS.AUTH.LOGOUT
+  );
 
-    await removeUser();
-    await removeCsrfToken();
+  await clearAuthData();
 
-    return response.data;
-  } catch (error) {
-    await removeUser();
-    await removeCsrfToken();
-    throw error;
-  }
+  return response.data;
 };
 
 export const getCurrentUser = async (): Promise<ApiResponse<UserSchema>> => {

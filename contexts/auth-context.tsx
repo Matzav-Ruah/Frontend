@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { auth } from '@/api';
+import { auth } from '@/api/auth';
 import { UserSchema, LoginCredentials, RegisterCredentials } from '@/api/types';
 import { getUser, removeUser, setUser, isAuthenticated as checkIsAuthenticated } from '@/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -25,9 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const loadUser = async () => {
       try {
         const storedUser = await getUser();
-        if (storedUser) {
-          setUserState(storedUser);
-        }
+        if (storedUser) setUserState(storedUser);
       } catch (error) {
         console.error('Failed to load user:', error);
       } finally {
@@ -63,6 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       queryClient.invalidateQueries();
     },
   });
+
   const registerMutation = useMutation({
     mutationFn: auth.register,
     onSuccess: (response) => {
