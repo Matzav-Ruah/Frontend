@@ -1,12 +1,8 @@
-import { apiClient, clearAuthData , setUser } from './client';
-import {
-  ApiResponse,
-  LoginCredentials,
-  RegisterCredentials,
-  UserSchema,
-} from './types';
-import { API_CONFIG } from './config';
-import "./interceptors";
+import { apiClient, clearAuthData, setUser } from '../client';
+import { LoginCredentials, RegisterCredentials, UserSchema } from './users.types';
+import { ApiResponse } from '../types';
+import { API_CONFIG } from '../config';
+import "../interceptors";
 
 export const login = async (
   credentials: LoginCredentials

@@ -16,6 +16,14 @@ export const API_CONFIG = {
     USERS: {
       CURRENT: '/users/user',
     },
+
+    EVENTS: {
+      GET_ALL_EVENTS: '/events/get-all-events',
+      GET_EVENT: '/events/get-event',
+      CREATE_EVENT: '/events/create-event',
+      UPDATE_EVENT: '/events/update-event',
+      DELETE_EVENT: '/events/delete-event',
+    },
   },
 
   STORAGE_KEYS: {

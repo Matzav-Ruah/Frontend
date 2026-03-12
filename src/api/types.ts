@@ -1,24 +1,3 @@
-export interface CsrfTokenResponse {
-  csrftoken: string;
-}
-
-export interface SignInSchema {
-  email: string;
-  password: string;
-}
-
-export interface UserSchema {
-  id: number;
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  settings: Record<string, unknown>;
-  created_at: string;
-  updated_at: string;
-  is_active: boolean;
-}
-
 export interface ApiResponse<T = unknown> {
   data: T;
   success: boolean;
@@ -46,7 +25,3 @@ export interface ApiRequestOptions {
   headers?: Record<string, string>;
   timeout?: number;
 }
-
-export interface LoginCredentials extends SignInSchema { }
-
-export interface RegisterCredentials extends SignInSchema { }

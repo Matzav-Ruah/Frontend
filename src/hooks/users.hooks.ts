@@ -1,6 +1,7 @@
 import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
-import { ApiResponse, ApiError, UserSchema, LoginCredentials, RegisterCredentials } from '@/src/api/types';
-import { auth } from '@/src/api/auth';
+import { ApiResponse, ApiError } from '@/src/api/types';
+import { UserSchema, LoginCredentials, RegisterCredentials } from '@/src/api/users/users.types';
+import { auth } from '@/src/api/users/users.api';
 
 export const useCurrentUser = (
     options?: Omit<UseQueryOptions<ApiResponse<UserSchema>, ApiError, ApiResponse<UserSchema>>, 'queryKey' | 'queryFn'>
