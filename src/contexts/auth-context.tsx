@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { auth } from '@/api/auth';
-import { UserSchema, LoginCredentials, RegisterCredentials } from '@/api/types';
-import { getUser, removeUser, setUser, isAuthenticated as checkIsAuthenticated } from '@/api/client';
+import { auth } from '@/src/api/auth';
+import { UserSchema, LoginCredentials, RegisterCredentials } from '@/src/api/types';
+import { getUser, removeUser, setUser } from '@/src/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface AuthContextType {
