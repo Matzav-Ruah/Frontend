@@ -1,17 +1,11 @@
 import { Redirect } from 'expo-router';
 import { useAuth } from '@/src/contexts/auth-context';
-import { Button, View, Text } from 'react-native';
 
 export default function Index() {
-    const { isAuthenticated, isLoading, logout } = useAuth();
+    const { isAuthenticated, isLoading } = useAuth();
 
     if (isLoading) return null;
-    if (isAuthenticated) return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-            <Text>Welcome back! You are logged in.</Text>
-            <Button onPress={async () => await logout()} title="Logout" />
-        </View>
-    );
+    if (isAuthenticated) return <Redirect href="/(pages)/main" />;
 
     return <Redirect href="/(auth)/login" />;
 }
