@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { auth } from '@/src/api/auth';
-import { UserSchema, LoginCredentials, RegisterCredentials } from '@/src/api/types';
+import { auth } from '@/src/api/users/users.api';
+import { UserSchema, LoginCredentials, RegisterCredentials } from '@/src/api/users/users.types';
 import { getUser, removeUser, setUser } from '@/src/api/client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 

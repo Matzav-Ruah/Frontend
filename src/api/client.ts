@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ApiResponse, CsrfTokenResponse, UserSchema } from './types';
+import { ApiResponse } from './types';
+import { CsrfTokenResponse, UserSchema } from './users/users.types'
 import { API_CONFIG } from './config';
 
 export const apiClient: AxiosInstance = axios.create({
