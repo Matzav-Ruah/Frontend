@@ -15,10 +15,10 @@ export const getAllEvents = async (): Promise<ApiResponse<EventSchema[]>> => {
 };
 
 
-export const getEvent = async (event_id: number): Promise<ApiResponse<EventSchema>> => {
+export const getEvent = async (date: string): Promise<ApiResponse<EventSchema>> => {
     const response = await apiClient.get<ApiResponse<EventSchema>>(
         API_CONFIG.ENDPOINTS.EVENTS.GET_EVENT,
-        { params: { event_id } }
+        { params: { date } }
     );
     if (response.data) {
         return response.data;
@@ -28,7 +28,7 @@ export const getEvent = async (event_id: number): Promise<ApiResponse<EventSchem
 
 
 export const createEvent = async (
-    payload: { emotional_state: "bad" | "neutral" | "good"; data: Record<string, unknown> }
+    payload: { emotional_state: "bad" | "neutral" | "good"; data: Record<string, unknown>; date: string }
 ): Promise<ApiResponse<EventSchema>> => {
     const response = await apiClient.post<ApiResponse<EventSchema>>(
         API_CONFIG.ENDPOINTS.EVENTS.CREATE_EVENT,
@@ -42,12 +42,13 @@ export const createEvent = async (
 
 
 export const updateEvent = async (
-    event_id: number,
+    date: string,
     payload: { emotional_state?: "bad" | "neutral" | "good"; data?: Record<string, unknown> }
 ): Promise<ApiResponse<EventSchema>> => {
     const response = await apiClient.put<ApiResponse<EventSchema>>(
-        `${API_CONFIG.ENDPOINTS.EVENTS.UPDATE_EVENT}/${event_id}`,
-        payload
+        API_CONFIG.ENDPOINTS.EVENTS.UPDATE_EVENT,
+        payload,
+        { params: { date } }
     );
     if (response.data) {
         return response.data;
@@ -56,9 +57,10 @@ export const updateEvent = async (
 };
 
 
-export const deleteEvent = async (event_id: number): Promise<ApiResponse<Record<string, unknown>>> => {
+export const deleteEvent = async (date: string): Promise<ApiResponse<Record<string, unknown>>> => {
     const response = await apiClient.delete<ApiResponse<Record<string, unknown>>>(
-        `${API_CONFIG.ENDPOINTS.EVENTS.DELETE_EVENT}/${event_id}`
+        API_CONFIG.ENDPOINTS.EVENTS.DELETE_EVENT,
+        { params: { date } }
     );
     if (response.data) {
         return response.data;
