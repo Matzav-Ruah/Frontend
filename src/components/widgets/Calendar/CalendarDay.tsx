@@ -9,9 +9,10 @@ interface CalendarDayProps {
 }
 
 export default function CalendarDay({ day, emotionalState, month, year, today }: CalendarDayProps) {
-    if (!day) return <View className="w-[14.28%] h-10" />
-    let textStyle = "text-third"
-    let dayStyle = "border border-third"
+    if (!day) return <View className="w-[14.28%] aspect-square" />
+    let textStyle = "text-primary"
+    let dayStyle = "border border-light_third"
+
     switch (emotionalState) {
         case "good":
             textStyle = "text-ind_good"
@@ -27,18 +28,26 @@ export default function CalendarDay({ day, emotionalState, month, year, today }:
             break;
     }
     const isToday = today === `${year}-${month}-${day}`
-    if (isToday) dayStyle += " bg-[#7CCDFC]/20"
+
+    if (isToday) {
+        dayStyle = "border-[2px] border-third bg-third/20"
+        textStyle = "text-primary"
+    }
+
     if (new Date(today) < new Date(`${year}-${month}-${day}`)) {
         dayStyle = "border border-secondary/50";
         textStyle = "text-secondary/50"
     }
+
     return (
-        <TouchableOpacity
-            className={`w-[14.28%] h-10 flex items-center justify-center rounded-full ${dayStyle}`}
-            key={`day-${day}`}
-            onPress={() => console.log(`${day}.${month}.${year}`)}
-        >
-            <Text className={`font-medium ${textStyle}`}>{day}</Text>
-        </TouchableOpacity>
+        <View className="w-[14.28%] aspect-square items-center justify-center py-1">
+            <TouchableOpacity
+                className={`w-9 h-9 flex items-center justify-center rounded-full ${dayStyle}`}
+                key={`day-${day}`}
+                onPress={() => console.log(`${day}.${month}.${year}`)}
+            >
+                <Text className={`text-sm font-medium ${textStyle}`}>{day}</Text>
+            </TouchableOpacity>
+        </View>
     )
 }
