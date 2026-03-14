@@ -1,4 +1,6 @@
-import CalendarWidget from "@/src/components/widgets/Calendar/CalendarWidget";
+import CalendarWidget from "@/src/components/widgets/Calendar/CalendarWidget"
+import StreakWidget from "@/src/components/widgets/StreakWidget";
+import { useLeaderboard } from "@/src/hooks/users.hooks";
 import { ScrollView, View } from "react-native";
 
 
@@ -11,6 +13,7 @@ export default function MainScreen() {
                 showsVerticalScrollIndicator={false}
             >
                 <CalendarWidget />
+                <StreakWidget />
             </ScrollView>
         </View>
     );
