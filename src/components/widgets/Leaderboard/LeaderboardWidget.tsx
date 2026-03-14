@@ -9,6 +9,7 @@ import { UserProfileSchema } from "@/src/api/users/users.types";
 export default function LeaderboardWidget() {
     const { data: leaderboardData } = useLeaderboard();
     const { user: activeUser } = useAuth()
+    if (!leaderboardData?.success) return null;
     const isUserInLeaderboard = leaderboardData?.data?.users?.some((user) => user.id === activeUser?.id)
 
     return (
