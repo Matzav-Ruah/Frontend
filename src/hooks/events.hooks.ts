@@ -14,12 +14,12 @@ export const useGetAllEvents = (
 };
 
 export const useGetEvent = (
-    event_id: number,
+    date: string,
     options?: Omit<UseQueryOptions<ApiResponse<EventSchema>, ApiError, ApiResponse<EventSchema>>, 'queryKey' | 'queryFn'>
 ) => {
     return useQuery<ApiResponse<EventSchema>, ApiError>({
-        queryKey: ['events', event_id],
-        queryFn: async () => getEvent(event_id),
+        queryKey: ['events', date],
+        queryFn: async () => getEvent(date),
         ...options,
     });
 };
