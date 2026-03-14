@@ -14,6 +14,7 @@ export interface UserSchema {
     first_name: string;
     last_name: string;
     settings: Record<string, unknown>;
+    streak_count: number;
     created_at: string;
     updated_at: string;
     is_active: boolean;
