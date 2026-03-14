@@ -15,6 +15,7 @@ export const API_CONFIG = {
 
     USERS: {
       CURRENT: '/users/user',
+      LEADERBOARD: '/users/leaderboard',
     },
 
     EVENTS: {
