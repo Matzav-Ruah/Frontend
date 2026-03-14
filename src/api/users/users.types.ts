@@ -23,3 +23,14 @@ export interface UserSchema {
 export interface LoginCredentials extends SignInSchema { }
 
 export interface RegisterCredentials extends SignInSchema { }
+
+export interface UserProfileSchema {
+    id: number;
+    username: string;
+    streak_count: number;
+}
+
+export interface LeaderboardSchema {
+    users: UserProfileSchema[];
+    activeUserPosition: number;
+}

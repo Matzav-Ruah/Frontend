@@ -1,7 +1,7 @@
 import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 import { ApiResponse, ApiError } from '@/src/api/types';
-import { UserSchema, LoginCredentials, RegisterCredentials } from '@/src/api/users/users.types';
-import { auth } from '@/src/api/users/users.api';
+import { UserSchema, LoginCredentials, RegisterCredentials, LeaderboardSchema } from '@/src/api/users/users.types';
+import { auth, getLeaderboard } from '@/src/api/users/users.api';
 
 export const useCurrentUser = (
     options?: Omit<UseQueryOptions<ApiResponse<UserSchema>, ApiError, ApiResponse<UserSchema>>, 'queryKey' | 'queryFn'>
@@ -36,6 +36,17 @@ export const useLogout = (
 ) => {
     return useMutation<ApiResponse<void>, ApiError, void>({
         mutationFn: async () => auth.logout(),
+        ...options,
+    });
+};
+
+
+export const useLeaderboard = (
+    options?: Omit<UseQueryOptions<ApiResponse<LeaderboardSchema>, ApiError, ApiResponse<LeaderboardSchema>>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ApiResponse<LeaderboardSchema>, ApiError>({
+        queryKey: ['user', 'leaderboard'],
+        queryFn: async () => getLeaderboard(),
         ...options,
     });
 };
