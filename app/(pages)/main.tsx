@@ -1,4 +1,5 @@
 import CalendarWidget from "@/src/components/widgets/Calendar/CalendarWidget"
+import EmotionalWidget from "@/src/components/widgets/EmotionalWidget";
 import LeaderboardWidget from "@/src/components/widgets/Leaderboard/LeaderboardWidget";
 import StreakWidget from "@/src/components/widgets/StreakWidget";
 import { useAuth } from "@/src/contexts/auth-context";
@@ -16,6 +17,7 @@ export default function MainScreen() {
                 showsVerticalScrollIndicator={false}
             >
                 <CalendarWidget />
+                <EmotionalWidget />
                 {
                     user?.streak_count !== 0 &&
                     <StreakWidget streak_count={user?.streak_count || -1} />
