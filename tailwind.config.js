@@ -11,6 +11,7 @@ module.exports = {
         primary: '#657D9E',
         secondary: '#9DB2CE',
         background: '#CFDCED',
+        third: '#A8D5F2',
         ind_good: '#5C8DFF',
         ind_neutral: '#5A4FCF',
         ind_bad: '#5846A8',
