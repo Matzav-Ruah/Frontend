@@ -21,13 +21,13 @@ const monthNames = [
 ];
 
 const daysOfWeek = [
-    'Пн',
-    'Вт',
-    'Ср',
-    'Чт',
-    'Пт',
-    'Сб',
-    'Вс'
+    'П',
+    'В',
+    'С',
+    'Ч',
+    'П',
+    'С',
+    'В'
 ]
 
 
@@ -81,12 +81,12 @@ export default function CalendarWidget() {
 
     return (
         <View>
-            <View className="w-full flex flex-row items-center justify-between mb-3">
+            <View className="w-full flex flex-row items-center justify-between mb-3 px-5">
                 <TouchableOpacity onPress={handlePrevMonth} disabled={currentDate.getMonth() === today.getMonth() + 1}>
                     <Feather
                         className={currentDate.getMonth() === today.getMonth() + 1 ? "opacity-0" : ""}
                         name="chevron-left"
-                        size={25}
+                        size={28}
                         color="#657D9E"
                     />
                 </TouchableOpacity>
@@ -95,16 +95,16 @@ export default function CalendarWidget() {
                     <Feather
                         className={currentDate.getMonth() === today.getMonth() ? "opacity-0" : ""}
                         name="chevron-right"
-                        size={25}
+                        size={28}
                         color="#657D9E"
                     />
                 </TouchableOpacity>
             </View>
-            <View className="bg-white rounded-3xl px-5 py-5 mb-3 shadow-sm">
-                <View className="flex flex-row flex-wrap">
-                    {daysOfWeek.map((day) => (
-                        <View key={day} className="w-[14.28%] flex items-center justify-center py-2">
-                            <Text className="font-medium text-gray-500">{day}</Text>
+            <View className="bg-white rounded-[32px] px-3 py-2 mb-3 shadow-sm border border-gray-100">
+                <View className="flex flex-row flex-wrap mb-2">
+                    {daysOfWeek.map((day, index) => (
+                        <View key={`${day}-${index}`} className="w-[14.28%] flex items-center justify-center py-2">
+                            <Text className="text-sm font-medium text-gray-800">{day}</Text>
                         </View>
                     ))}
                 </View>
