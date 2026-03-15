@@ -34,3 +34,7 @@ export interface LeaderboardSchema {
     users: UserProfileSchema[];
     activeUserPosition: number;
 }
+
+export interface StreakSchema {
+    streak_count: number;
+}

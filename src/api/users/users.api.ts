@@ -1,5 +1,5 @@
 import { apiClient, clearAuthData, setUser } from '../client';
-import { LeaderboardSchema, LoginCredentials, RegisterCredentials, UserSchema } from './users.types';
+import { LeaderboardSchema, LoginCredentials, RegisterCredentials, StreakSchema, UserSchema } from './users.types';
 import { ApiResponse } from '../types';
 import { API_CONFIG } from '../config';
 import "../interceptors";
@@ -53,6 +53,14 @@ export const getLeaderboard = async (): Promise<ApiResponse<LeaderboardSchema>> 
   const response = await apiClient.get<ApiResponse<LeaderboardSchema>>(
     API_CONFIG.ENDPOINTS.USERS.LEADERBOARD,
   );
+  return response.data;
+};
+
+export const getCurrentStreak = async (): Promise<ApiResponse<StreakSchema>> => {
+  const response = await apiClient.get<ApiResponse<StreakSchema>>(
+    API_CONFIG.ENDPOINTS.USERS.STREAK
+  );
+
   return response.data;
 };
 
