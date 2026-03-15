@@ -16,6 +16,7 @@ export const API_CONFIG = {
     USERS: {
       CURRENT: '/users/user',
       LEADERBOARD: '/users/leaderboard',
+      STREAK: '/users/get-user-streak',
     },
 
     EVENTS: {

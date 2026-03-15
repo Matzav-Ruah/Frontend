@@ -1,7 +1,7 @@
 import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 import { ApiResponse, ApiError } from '@/src/api/types';
-import { UserSchema, LoginCredentials, RegisterCredentials, LeaderboardSchema } from '@/src/api/users/users.types';
-import { auth, getLeaderboard } from '@/src/api/users/users.api';
+import { UserSchema, LoginCredentials, RegisterCredentials, LeaderboardSchema, StreakSchema } from '@/src/api/users/users.types';
+import { auth, getCurrentStreak, getLeaderboard } from '@/src/api/users/users.api';
 
 export const useCurrentUser = (
     options?: Omit<UseQueryOptions<ApiResponse<UserSchema>, ApiError, ApiResponse<UserSchema>>, 'queryKey' | 'queryFn'>
@@ -47,6 +47,17 @@ export const useLeaderboard = (
     return useQuery<ApiResponse<LeaderboardSchema>, ApiError>({
         queryKey: ['user', 'leaderboard'],
         queryFn: async () => getLeaderboard(),
+        ...options,
+    });
+};
+
+
+export const useCurrentStreak = (
+    options?: Omit<UseQueryOptions<ApiResponse<StreakSchema>, ApiError, ApiResponse<StreakSchema>>, 'queryKey' | 'queryFn'>
+) => {
+    return useQuery<ApiResponse<StreakSchema>, ApiError>({
+        queryKey: ['user', 'streak'],
+        queryFn: async () => getCurrentStreak(),
         ...options,
     });
 };

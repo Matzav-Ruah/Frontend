@@ -48,12 +48,15 @@ export default function CalendarWidget() {
     }, [currentDate])
 
     const eventMap = useMemo(() => {
-        const map: Record<string, string> = {};
+        const map: Record<string, { emotionalState: string, inStreak: boolean }> = {};
         if (!events?.data) return map;
 
         for (const event of events.data) {
             const eventDate = new Date(event.date);
-            map[eventDate.toLocaleDateString("sv-SE")] = event.emotional_state;
+            map[eventDate.toLocaleDateString("sv-SE")] = {
+                emotionalState: event.emotional_state,
+                inStreak: event.in_streak
+            };
         }
         return map;
     }, [events]);
@@ -72,7 +75,8 @@ export default function CalendarWidget() {
             const dateString = `${y}-${monthStr}-${dayStr}`;
             days.push({
                 day: i,
-                emotionalState: eventMap[dateString] || null
+                emotionalState: eventMap[dateString]?.emotionalState || null,
+                inStreak: eventMap[dateString]?.inStreak || false,
             });
         }
         return days;
@@ -119,6 +123,7 @@ export default function CalendarWidget() {
                             day={day.day}
                             emotionalState={day.emotionalState}
                             today={removeTimezone(today)}
+                            inStreak={day.inStreak}
                             onPress={() => {
                                 router.push({
                                     pathname: "/(pages)/day",

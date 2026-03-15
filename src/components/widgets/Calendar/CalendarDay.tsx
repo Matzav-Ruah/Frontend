@@ -7,9 +7,10 @@ interface CalendarDayProps {
     year: string;
     today: string;
     onPress: () => void;
+    inStreak: boolean;
 }
 
-export default function CalendarDay({ day, emotionalState, month, year, today, onPress }: CalendarDayProps) {
+export default function CalendarDay({ day, emotionalState, month, year, today, onPress, inStreak }: CalendarDayProps) {
     if (!day) return <View className="w-[14.28%] aspect-square" />
     let textStyle = "text-primary"
     let dayStyle = "border border-light_third"
@@ -38,6 +39,10 @@ export default function CalendarDay({ day, emotionalState, month, year, today, o
     if (isFuture) {
         dayStyle = "border border-secondary/50";
         textStyle = "text-secondary/50"
+    }
+
+    if (inStreak) {
+        dayStyle += " bg-[#ff9506]/60"
     }
 
     return (

@@ -1,4 +1,4 @@
-import useEventsMutations from "@/src/mutations/events.mutations";
+import { useCreateEventMutation, useDeleteEventMutation, useUpdateEventMutation } from "@/src/mutations/events.mutations";
 import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -10,7 +10,9 @@ interface EmotionalWidgetProps {
 
 export default function EmotionalWidget({ widgetDate, showText = true, selectedState }: EmotionalWidgetProps) {
     const router = useRouter();
-    const { createEvent, updateEvent, deleteEvent } = useEventsMutations(widgetDate);
+    const { createEvent } = useCreateEventMutation(widgetDate);
+    const { updateEvent } = useUpdateEventMutation(widgetDate);
+    const { deleteEvent } = useDeleteEventMutation(widgetDate);
 
     const handleClick = (state: "bad" | "neutral" | "good") => {
         if (selectedState && selectedState !== state) {
