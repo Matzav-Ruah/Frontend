@@ -5,6 +5,7 @@ import { useGetEvent } from "@/src/hooks/events.hooks";
 import EmotionalWidget from "@/src/components/widgets/EmotionalWidget";
 import { Feather } from "@expo/vector-icons";
 import { normalizeDate } from "@/src/utils/utils";
+import SlidersWidget from "@/src/components/widgets/Day/SlidersWidget";
 
 const monthNames = [
     'Января',
@@ -90,6 +91,7 @@ export default function DayScreen() {
                     showText={false}
                     selectedState={eventData?.data?.emotional_state}
                 />
+                {eventData?.data && <SlidersWidget eventData={eventData.data} />}
             </ScrollView>
         </View>
     );
