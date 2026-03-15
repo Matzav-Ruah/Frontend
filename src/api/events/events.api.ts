@@ -1,5 +1,5 @@
 import { apiClient } from '../client';
-import { EventSchema } from './events.types';
+import { CreateEventSchema, EventSchema, UpdateEventSchema } from './events.types';
 import { ApiResponse } from '../types';
 import { API_CONFIG } from '../config';
 import "../interceptors";
@@ -15,21 +15,19 @@ export const getAllEvents = async (): Promise<ApiResponse<EventSchema[]>> => {
 };
 
 
-export const getEvent = async (date: string): Promise<ApiResponse<EventSchema>> => {
-    const response = await apiClient.get<ApiResponse<EventSchema>>(
+export const getEvent = async (date: string): Promise<ApiResponse<EventSchema | null>> => {
+    const response = await apiClient.get<ApiResponse<EventSchema | null>>(
         API_CONFIG.ENDPOINTS.EVENTS.GET_EVENT,
         { params: { date } }
     );
     if (response.data) {
         return response.data;
     }
-    return { success: false, data: {} as EventSchema };
+    return { success: false, data: null };
 };
 
 
-export const createEvent = async (
-    payload: { emotional_state: "bad" | "neutral" | "good"; data: Record<string, unknown>; date: string }
-): Promise<ApiResponse<EventSchema>> => {
+export const createEvent = async (payload: CreateEventSchema): Promise<ApiResponse<EventSchema>> => {
     const response = await apiClient.post<ApiResponse<EventSchema>>(
         API_CONFIG.ENDPOINTS.EVENTS.CREATE_EVENT,
         payload
@@ -41,14 +39,11 @@ export const createEvent = async (
 };
 
 
-export const updateEvent = async (
-    date: string,
-    payload: { emotional_state?: "bad" | "neutral" | "good"; data?: Record<string, unknown> }
-): Promise<ApiResponse<EventSchema>> => {
+export const updateEvent = async (payload: UpdateEventSchema): Promise<ApiResponse<EventSchema>> => {
     const response = await apiClient.put<ApiResponse<EventSchema>>(
         API_CONFIG.ENDPOINTS.EVENTS.UPDATE_EVENT,
         payload,
-        { params: { date } }
+        { params: { date: payload.date } }
     );
     if (response.data) {
         return response.data;

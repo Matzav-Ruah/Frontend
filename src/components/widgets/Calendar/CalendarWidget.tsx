@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { useGetAllEvents } from "@/src/hooks/events.hooks";
 import CalendarDay from "./CalendarDay";
 import removeTimezone, { normalizeDate } from "@/src/utils/utils";
+import { useRouter } from "expo-router";
 
 const monthNames = [
     'Январь',
@@ -32,6 +33,7 @@ const daysOfWeek = [
 
 
 export default function CalendarWidget() {
+    const router = useRouter();
     const [currentDate, setCurrentDate] = useState(new Date());
     const today = new Date();
     const { data: events } = useGetAllEvents()
@@ -117,6 +119,17 @@ export default function CalendarWidget() {
                             day={day.day}
                             emotionalState={day.emotionalState}
                             today={removeTimezone(today)}
+                            onPress={() => {
+                                router.push({
+                                    pathname: "/(pages)/day",
+                                    params: {
+                                        day: normalizeDate(day.day),
+                                        month: month,
+                                        year: year,
+                                    }
+                                })
+                            }
+                            }
                         />
                     })}
                 </View>

@@ -6,9 +6,10 @@ interface CalendarDayProps {
     month: string;
     year: string;
     today: string;
+    onPress: () => void;
 }
 
-export default function CalendarDay({ day, emotionalState, month, year, today }: CalendarDayProps) {
+export default function CalendarDay({ day, emotionalState, month, year, today, onPress }: CalendarDayProps) {
     if (!day) return <View className="w-[14.28%] aspect-square" />
     let textStyle = "text-primary"
     let dayStyle = "border border-light_third"
@@ -33,8 +34,8 @@ export default function CalendarDay({ day, emotionalState, month, year, today }:
         dayStyle = "border-[2px] border-third bg-third/20"
         textStyle = "text-primary"
     }
-
-    if (new Date(today) < new Date(`${year}-${month}-${day}`)) {
+    const isFuture = new Date(today) < new Date(`${year}-${month}-${day}`)
+    if (isFuture) {
         dayStyle = "border border-secondary/50";
         textStyle = "text-secondary/50"
     }
@@ -44,7 +45,8 @@ export default function CalendarDay({ day, emotionalState, month, year, today }:
             <TouchableOpacity
                 className={`w-9 h-9 flex items-center justify-center rounded-full ${dayStyle}`}
                 key={`day-${day}`}
-                onPress={() => console.log(`${day}.${month}.${year}`)}
+                onPress={onPress}
+                disabled={isFuture}
             >
                 <Text className={`text-sm font-medium ${textStyle}`}>{day}</Text>
             </TouchableOpacity>
