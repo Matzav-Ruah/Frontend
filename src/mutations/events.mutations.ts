@@ -9,6 +9,7 @@ export default function useEventsMutations(widgetDate: string) {
             queryClient.invalidateQueries({ queryKey: ["events", widgetDate] });
             queryClient.invalidateQueries({ queryKey: ["events", "all"] });
             queryClient.invalidateQueries({ queryKey: ["user", "current"] });
+            queryClient.invalidateQueries({ queryKey: ["user", "streak"] });
         },
     });
     const { mutate: updateEvent } = useUpdateEvent({
@@ -24,6 +25,7 @@ export default function useEventsMutations(widgetDate: string) {
             queryClient.invalidateQueries({ queryKey: ["events", widgetDate] });
             queryClient.invalidateQueries({ queryKey: ["events", "all"] });
             queryClient.invalidateQueries({ queryKey: ["user", "current"] });
+            queryClient.invalidateQueries({ queryKey: ["user", "streak"] });
         },
     });
     return {
