@@ -1,4 +1,5 @@
 import useEventsMutations from "@/src/mutations/events.mutations";
+import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 
 interface EmotionalWidgetProps {
@@ -8,6 +9,7 @@ interface EmotionalWidgetProps {
 }
 
 export default function EmotionalWidget({ widgetDate, showText = true, selectedState }: EmotionalWidgetProps) {
+    const router = useRouter();
     const { createEvent, updateEvent, deleteEvent } = useEventsMutations(widgetDate);
 
     const handleClick = (state: "bad" | "neutral" | "good") => {
@@ -21,9 +23,25 @@ export default function EmotionalWidget({ widgetDate, showText = true, selectedS
         createEvent({ emotional_state: state, event_data: {}, date: widgetDate });
     }
 
+    const handleOpenDay = () => {
+        router.push({
+            pathname: "/(pages)/day",
+            params: {
+                day: widgetDate.split("-")[2],
+                month: widgetDate.split("-")[1],
+                year: widgetDate.split("-")[0],
+            },
+        })
+    }
+
     return (
         <View className="flex items-center w-full mb-3 shadow-lg">
-            {showText && <Text className="text-[17px] font-medium text-primary mb-2">Мое состояние сегодня</Text>}
+            {
+                showText &&
+                <TouchableOpacity onPress={handleOpenDay}>
+                    <Text className="text-[17px] font-medium text-primary mb-2">Мое состояние сегодня</Text>
+                </TouchableOpacity>
+            }
             <View className="w-full bg-white rounded-full p-1.5 flex flex-row items-center justify-between shadow-sm border border-gray-100/30">
                 <TouchableOpacity onPress={() => handleClick("bad")} className={`${selectedState ? selectedState === "bad" ? "bg-ind_bad" : "bg-gray-200" : "bg-ind_bad"} rounded-full px-2 py-4 flex-1 items-center justify-center`}>
                     <Text numberOfLines={1} className="text-white font-medium text-[14px]">Плохо</Text>
