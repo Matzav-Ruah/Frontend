@@ -32,7 +32,6 @@ export const logout = async (): Promise<ApiResponse<void>> => {
   const response = await apiClient.post<ApiResponse<void>>(
     API_CONFIG.ENDPOINTS.AUTH.LOGOUT
   );
-
   await clearAuthData();
 
   return response.data;
@@ -45,7 +44,6 @@ export const getCurrentUser = async (): Promise<ApiResponse<UserSchema>> => {
   if (response.data.success && response.data.data) {
     await setUser(response.data.data);
   }
-
   return response.data;
 };
 
@@ -60,7 +58,6 @@ export const getCurrentStreak = async (): Promise<ApiResponse<StreakSchema>> => 
   const response = await apiClient.get<ApiResponse<StreakSchema>>(
     API_CONFIG.ENDPOINTS.USERS.STREAK
   );
-
   return response.data;
 };
 

@@ -5,6 +5,7 @@ export interface EventSchema {
     event_data: Record<string, unknown>;
     created_at: string;
     updated_at: string;
+    in_streak: boolean;
 }
 
 export interface CreateEventSchema {

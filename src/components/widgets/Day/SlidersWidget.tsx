@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import SliderElement from "./SliderElement";
-import useEventsMutations from "@/src/mutations/events.mutations";
+import { useUpdateEventMutation } from "@/src/mutations/events.mutations";
 import { EventSchema } from "@/src/api/events/events.types";
 
 const sliders = [
@@ -23,7 +23,8 @@ const sliders = [
 ]
 
 export default function SlidersWidget({ eventData }: { eventData: EventSchema }) {
-    const { updateEvent } = useEventsMutations(eventData?.date);
+    const { updateEvent } = useUpdateEventMutation(eventData?.date);
+
     return (
         <View className="w-full bg-white rounded-3xl px-5 py-6 mb-4">
             <View className="w-full flex-col gap-4">
