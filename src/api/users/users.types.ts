@@ -33,6 +33,7 @@ export interface UserProfileSchema {
 export interface LeaderboardSchema {
     users: UserProfileSchema[];
     activeUserPosition: number;
+    activeUser: UserProfileSchema;
 }
 
 export interface StreakSchema {
