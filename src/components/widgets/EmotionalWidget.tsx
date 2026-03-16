@@ -1,6 +1,7 @@
 import { useCreateEventMutation, useDeleteEventMutation, useUpdateEventMutation } from "@/src/mutations/events.mutations";
 import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
+import * as Haptics from "expo-haptics";
 
 interface EmotionalWidgetProps {
     widgetDate: string;
@@ -15,6 +16,7 @@ export default function EmotionalWidget({ widgetDate, showText = true, selectedS
     const { deleteEvent } = useDeleteEventMutation(widgetDate);
 
     const handleClick = (state: "bad" | "neutral" | "good") => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
         if (selectedState && selectedState !== state) {
             updateEvent({ date: widgetDate, emotional_state: state });
             return;

@@ -2,6 +2,8 @@ import { Text, View } from "react-native";
 import Slider from "@react-native-community/slider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
+import * as Haptics from "expo-haptics";
+
 
 interface SliderElementProps {
     title: string;
@@ -37,7 +39,10 @@ export default function SliderElement({ title, onUpdate, value, iconName, color 
                     maximumValue={5}
                     step={1}
                     value={localValue}
-                    onValueChange={(val) => setLocalValue(val)}
+                    onValueChange={(val) => {
+                        setLocalValue(val);
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
+                    }}
                     onSlidingComplete={(val) => onUpdate(val)}
                     minimumTrackTintColor={color}
                     maximumTrackTintColor="#E2E8F0"
