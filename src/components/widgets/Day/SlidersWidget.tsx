@@ -2,25 +2,46 @@ import { View } from "react-native";
 import SliderElement from "./SliderElement";
 import { useUpdateEventMutation } from "@/src/mutations/events.mutations";
 import { EventSchema } from "@/src/api/events/events.types";
+import colors from "@/src/theme/colors";
 
-const sliders = [
+const defaultSliders = [
     {
         "title": "Головная боль",
         "name": "headache",
+        "icon": "head-alert-outline"
     },
     {
         "title": "Настроение",
         "name": "mood",
+        "icon": "emoticon-outline"
     },
     {
         "title": "Сон",
         "name": "sleep",
+        "icon": "sleep"
     },
     {
         "title": "Социальная батарейка",
         "name": "social",
+        "icon": "account-group-outline"
     },
-]
+];
+
+const defaultValues = {
+    "bad": {
+        defaultValue: 1,
+        color: colors.ind_bad,
+    },
+    "neutral": {
+        defaultValue: 3,
+        color: colors.ind_neutral,
+    },
+    "good": {
+        defaultValue: 4,
+        color: colors.ind_good,
+    },
+};
+
 
 export default function SlidersWidget({ eventData }: { eventData: EventSchema }) {
     const { updateEvent } = useUpdateEventMutation(eventData?.date);
@@ -28,11 +49,15 @@ export default function SlidersWidget({ eventData }: { eventData: EventSchema })
     return (
         <View className="w-full bg-white rounded-3xl px-5 py-6 mb-4">
             <View className="w-full flex-col gap-4">
-                {sliders.map((slider) => (
+                {defaultSliders.map((slider) => (
                     <SliderElement
                         key={slider.name}
                         title={slider.title}
-                        value={(eventData.event_data[slider.name] ?? 50) as number}
+                        iconName={slider.icon as any}
+                        value={(
+                            eventData.event_data[slider.name] as number ??
+                            defaultValues[eventData.emotional_state].defaultValue
+                        )}
                         onUpdate={(value) => updateEvent({
                             date: eventData.date,
                             event_data: {
@@ -40,6 +65,7 @@ export default function SlidersWidget({ eventData }: { eventData: EventSchema })
                                 [slider.name]: value,
                             },
                         })}
+                        color={defaultValues[eventData.emotional_state].color}
                     />
                 ))}
             </View>
