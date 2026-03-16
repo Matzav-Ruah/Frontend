@@ -6,8 +6,8 @@ import colors from "@/src/theme/colors";
 
 const defaultSliders = [
     {
-        "title": "Головная боль",
-        "name": "headache",
+        "title": "Самочувствие",
+        "name": "wellbeing",
         "icon": "head-alert-outline"
     },
     {
