@@ -2,14 +2,12 @@ import { Octicons } from "@expo/vector-icons";
 import { View, Text } from "react-native";
 import TopElement from "./TopElement";
 import { useLeaderboard } from "@/src/hooks/users.hooks";
-import { useAuth } from "@/src/contexts/auth-context";
-import { UserProfileSchema } from "@/src/api/users/users.types";
 
 
 export default function LeaderboardWidget() {
     const { data: leaderboardData } = useLeaderboard();
-    const { user: activeUser } = useAuth()
     if (!leaderboardData?.success) return null;
+    const activeUser = leaderboardData?.data?.activeUser;
     const isUserInLeaderboard = leaderboardData?.data?.users?.some((user) => user.id === activeUser?.id)
 
     return (
@@ -30,7 +28,7 @@ export default function LeaderboardWidget() {
                             </Text>
                             <View className="flex-1 h-[2px] bg-primary/70" />
                         </View>
-                        <TopElement key={activeUser?.id} index={3} user={activeUser as UserProfileSchema} isActiveUser={true} />
+                        <TopElement key={activeUser?.id} index={3} user={activeUser} isActiveUser={true} />
                     </>
                 )}
             </View>
