@@ -17,7 +17,8 @@ const tabs: TabItem[] = [
 
 export default function BottomBar() {
     const router = useRouter();
-    const activeTab = usePathname().slice(1);
+    const pathname = usePathname();
+    const activeTab = pathname.includes('day') ? 'main' : pathname.slice(1);
     return (
         <View className="absolute bottom-10 left-6 right-6 bg-white rounded-full flex-row items-center justify-between px-6 py-3 shadow-lg">
             {tabs.map((tab) => {
