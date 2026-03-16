@@ -8,14 +8,14 @@ import { Redirect } from 'expo-router';
 type MenuItemProps = {
     iconName: keyof typeof Feather.glyphMap;
     title: string;
-    isDestructive?: boolean;
+    name: string;
 };
 
 const menuItems: MenuItemProps[] = [
-    { iconName: 'file-text', title: 'Личные данные' },
-    { iconName: 'bell', title: 'Уведомления' },
-    { iconName: 'sun', title: 'Оформление' },
-    { iconName: 'headphones', title: 'Поддержка' },
+    { iconName: 'file-text', title: 'Личные данные', name: 'profile' },
+    { iconName: 'bell', title: 'Уведомления', name: 'notifications' },
+    { iconName: 'sun', title: 'Оформление', name: 'theme' },
+    { iconName: 'headphones', title: 'Поддержка', name: 'support' },
 ];
 
 export default function ProfileScreen() {
