@@ -33,6 +33,9 @@ export default function CalendarDay({ day, emotionalState, month, year, today, o
 
     if (isToday) {
         dayStyle = "border-[2px] border-third bg-third/20"
+        if (inStreak) {
+            dayStyle = "border-[2px] border-third"
+        }
         textStyle = "text-primary"
     }
     const isFuture = new Date(today) < new Date(`${year}-${month}-${day}`)
