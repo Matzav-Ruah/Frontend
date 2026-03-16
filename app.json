@@ -4,7 +4,7 @@
     "slug": "matzavruah",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/matzav_ruah_logo_cube.jpg",
+    "icon": "./assets/images/matzav_ruah_logo_cube.png",
     "scheme": "matzavruah",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
