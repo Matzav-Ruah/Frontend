@@ -9,6 +9,8 @@ export const useGetAllEvents = (
     return useQuery<ApiResponse<EventSchema[]>, ApiError>({
         queryKey: ['events', 'all'],
         queryFn: async () => getAllEvents(),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
         ...options,
     });
 };
@@ -20,6 +22,8 @@ export const useGetEvent = (
     return useQuery<ApiResponse<EventSchema | null>, ApiError>({
         queryKey: ['events', date],
         queryFn: async () => getEvent(date),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
         ...options,
     });
 };
