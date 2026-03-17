@@ -3,6 +3,7 @@ import Slider from "@react-native-community/slider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import * as Haptics from "expo-haptics";
+import { useTheme } from "@/src/contexts/theme-context";
 
 
 interface SliderElementProps {
@@ -15,6 +16,7 @@ interface SliderElementProps {
 
 export default function SliderElement({ title, onUpdate, value, iconName, color }: SliderElementProps) {
     const [localValue, setLocalValue] = useState(value);
+    const { colors } = useTheme();
 
     useEffect(() => {
         setLocalValue(value);
@@ -27,7 +29,7 @@ export default function SliderElement({ title, onUpdate, value, iconName, color 
                     {iconName && <MaterialCommunityIcons name={iconName} size={20} color={color} />}
                     <Text className={`text-[15px] font-bold tracking-tight`} style={{ color }}>{title}</Text>
                 </View>
-                <View className={`bg-primary/10 px-2.5 py-0.5 rounded-full`}>
+                <View className="px-2.5 py-0.5 rounded-full" style={{ backgroundColor: colors.primary + "10" }}>
                     <Text className="text-[12px] font-bold" style={{ color }}>{localValue}/5</Text>
                 </View>
             </View>

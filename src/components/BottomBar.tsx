@@ -1,6 +1,7 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import { usePathname, useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
+import { useTheme } from "../contexts/theme-context";
 
 type TabItem = {
     name: string;
@@ -17,10 +18,14 @@ const tabs: TabItem[] = [
 
 export default function BottomBar() {
     const router = useRouter();
+    const { colors } = useTheme();
     const pathname = usePathname();
     const activeTab = pathname.includes('day') ? 'main' : pathname.slice(1);
     return (
-        <View className="absolute bottom-10 left-6 right-6 bg-white rounded-full flex-row items-center justify-between px-6 py-3 shadow-lg">
+        <View
+            className="absolute bottom-10 left-6 right-6 bg-white rounded-full flex-row items-center justify-between px-6 py-3"
+            style={{ boxShadow: colors.shadow }}
+        >
             {tabs.map((tab) => {
                 const isActive = activeTab === tab.name;
 
@@ -29,7 +34,8 @@ export default function BottomBar() {
                         <TouchableOpacity
                             key={tab.name}
                             activeOpacity={0.7}
-                            className="flex-row items-center bg-blue-500 rounded-full px-5 py-3"
+                            className="flex-row items-center rounded-full px-5 py-3"
+                            style={{ backgroundColor: colors.ind_good }}
                             onPress={() => router.push(tab.route)}
                         >
                             <Feather name={tab.icon} size={20} color="white" />
@@ -47,7 +53,7 @@ export default function BottomBar() {
                         className="p-2"
                         onPress={() => router.push(tab.route)}
                     >
-                        <Feather name={tab.icon} size={24} color="#657D9E" />
+                        <Feather name={tab.icon} size={24} color={colors.primary} />
                     </TouchableOpacity>
                 );
             })}
