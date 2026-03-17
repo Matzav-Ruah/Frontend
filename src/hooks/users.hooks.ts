@@ -47,6 +47,8 @@ export const useLeaderboard = (
     return useQuery<ApiResponse<LeaderboardSchema>, ApiError>({
         queryKey: ['user', 'leaderboard'],
         queryFn: async () => getLeaderboard(),
+        staleTime: 1000 * 60 * 15,
+        gcTime: 1000 * 60 * 30,
         ...options,
     });
 };
@@ -58,6 +60,8 @@ export const useCurrentStreak = (
     return useQuery<ApiResponse<StreakSchema>, ApiError>({
         queryKey: ['user', 'streak'],
         queryFn: async () => getCurrentStreak(),
+        staleTime: 1000 * 60 * 5,
+        gcTime: 1000 * 60 * 10,
         ...options,
     });
 };
