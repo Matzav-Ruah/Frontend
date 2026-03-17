@@ -6,6 +6,7 @@ import EmotionalWidget from "@/src/components/widgets/EmotionalWidget";
 import { Feather } from "@expo/vector-icons";
 import { normalizeDate } from "@/src/utils/utils";
 import SlidersWidget from "@/src/components/widgets/Day/SlidersWidget";
+import { useTheme } from "@/src/contexts/theme-context";
 
 const monthNames = [
     'Января',
@@ -23,6 +24,7 @@ const monthNames = [
 ];
 
 export default function DayScreen() {
+    const { colors } = useTheme();
     const { day, month, year } = useLocalSearchParams();
     const router = useRouter();
     const { data: eventData, isLoading } = useGetEvent(`${year}-${month}-${day}`)
@@ -73,16 +75,16 @@ export default function DayScreen() {
                             className={isYearAgo ? "opacity-0" : ""}
                             name="chevron-left"
                             size={28}
-                            color="#657D9E"
+                            color={colors.primary}
                         />
                     </TouchableOpacity>
-                    <Text className="text-[17px] font-medium text-primary">{day} {monthNames[Number(month) - 1]}</Text>
+                    <Text className="text-[17px] font-medium" style={{ color: colors.primary }}>{day} {monthNames[Number(month) - 1]}</Text>
                     <TouchableOpacity onPress={handleNextDay} disabled={isToday}>
                         <Feather
                             className={isToday ? "opacity-0" : ""}
                             name="chevron-right"
                             size={28}
-                            color="#657D9E"
+                            color={colors.primary}
                         />
                     </TouchableOpacity>
                 </View>

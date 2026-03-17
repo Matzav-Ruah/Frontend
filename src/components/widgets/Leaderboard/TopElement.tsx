@@ -1,4 +1,5 @@
 import { UserProfileSchema } from "@/src/api/users/users.types";
+import { useTheme } from "@/src/contexts/theme-context";
 import { TouchableOpacity } from "react-native";
 import { View } from "react-native";
 import { Text } from "react-native";
@@ -10,32 +11,34 @@ interface TopElementProps {
 }
 
 export default function TopElement({ user, isActiveUser, index }: TopElementProps) {
-    let textColor = ""
+    const { colors } = useTheme();
+    let textColor = {}
     switch (index + 1) {
         case 1:
-            textColor = "text-yellow-500"
+            textColor = { color: colors.gold }
             break;
         case 2:
-            textColor = "text-gray-500"
+            textColor = { color: colors.silver }
             break;
         case 3:
-            textColor = "text-orange-500"
+            textColor = { color: colors.bronze }
             break;
         default:
-            textColor = "text-ind_good"
+            textColor = { color: colors.ind_good }
             break;
     }
-    if (isActiveUser) textColor = "text-ind_good"
+    if (isActiveUser) textColor = { color: colors.ind_good }
     return (
         <TouchableOpacity
-            className={`flex-row items-center justify-between bg-white rounded-3xl px-5 py-4 mb-2 shadow-sm`}
+            className={`flex-row items-center justify-between bg-white rounded-3xl px-5 py-4 mb-2`}
+            style={{ boxShadow: colors.shadow }}
             activeOpacity={0.7}
         >
             <View className="flex-row items-center justify-between w-full">
-                <Text className={`text-[16px] font-medium ${textColor}`}>
+                <Text className="text-[16px] font-medium" style={textColor}>
                     {user.username}
                 </Text>
-                <Text className={`text-[16px] font-medium ${textColor}`}>
+                <Text className="text-[16px] font-medium" style={textColor}>
                     {user.streak_count}
                 </Text>
             </View>

@@ -2,7 +2,7 @@ import { View } from "react-native";
 import SliderElement from "./SliderElement";
 import { useUpdateEventMutation } from "@/src/mutations/events.mutations";
 import { EventSchema } from "@/src/api/events/events.types";
-import colors from "@/src/theme/colors";
+import { useTheme } from "@/src/contexts/theme-context";
 
 const defaultSliders = [
     {
@@ -27,27 +27,33 @@ const defaultSliders = [
     },
 ];
 
-const defaultValues = {
-    "bad": {
-        defaultValue: 1,
-        color: colors.ind_bad,
-    },
-    "neutral": {
-        defaultValue: 3,
-        color: colors.ind_neutral,
-    },
-    "good": {
-        defaultValue: 4,
-        color: colors.ind_good,
-    },
-};
+
 
 
 export default function SlidersWidget({ eventData }: { eventData: EventSchema }) {
     const { updateEvent } = useUpdateEventMutation(eventData?.date);
+    const { colors } = useTheme();
+
+    const defaultValues = {
+        "bad": {
+            defaultValue: 1,
+            color: colors.ind_bad,
+        },
+        "neutral": {
+            defaultValue: 3,
+            color: colors.ind_neutral,
+        },
+        "good": {
+            defaultValue: 4,
+            color: colors.ind_good,
+        },
+    };
 
     return (
-        <View className="w-full bg-white rounded-3xl px-5 py-6 mb-4">
+        <View
+            className="w-full bg-white rounded-3xl px-5 py-6 mb-4"
+            style={{ boxShadow: colors.shadow }}
+        >
             <View className="w-full flex-col gap-4">
                 {defaultSliders.map((slider) => (
                     <SliderElement

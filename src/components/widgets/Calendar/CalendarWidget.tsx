@@ -5,6 +5,7 @@ import { useGetAllEvents } from "@/src/hooks/events.hooks";
 import CalendarDay from "./CalendarDay";
 import removeTimezone, { normalizeDate } from "@/src/utils/utils";
 import { useRouter } from "expo-router";
+import { useTheme } from "@/src/contexts/theme-context";
 
 const monthNames = [
     'Январь',
@@ -43,6 +44,7 @@ export default function CalendarWidget() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const today = new Date();
     const { data: events } = useGetAllEvents()
+    const { colors } = useTheme();
 
     const { year, month } = useMemo(() => {
         const y = currentDate.getFullYear();
@@ -101,20 +103,20 @@ export default function CalendarWidget() {
                         className={currentDate.getMonth() === today.getMonth() + 1 ? "opacity-0" : ""}
                         name="chevron-left"
                         size={28}
-                        color="#657D9E"
+                        color={colors.primary}
                     />
                 </TouchableOpacity>
-                <Text className="text-2xl font-medium text-primary">{monthNames[currentDate.getMonth()]}</Text>
+                <Text className="text-2xl font-medium" style={{ color: colors.primary }}>{monthNames[currentDate.getMonth()]}</Text>
                 <TouchableOpacity onPress={handleNextMonth} disabled={currentDate.getMonth() === today.getMonth()}>
                     <Feather
                         className={currentDate.getMonth() === today.getMonth() ? "opacity-0" : ""}
                         name="chevron-right"
                         size={28}
-                        color="#657D9E"
+                        color={colors.primary}
                     />
                 </TouchableOpacity>
             </View>
-            <View className="bg-white rounded-[32px] px-3 py-2 mb-3 shadow-sm border border-gray-100">
+            <View className="bg-white rounded-[32px] px-3 py-2 mb-3 border border-gray-100" style={{ boxShadow: colors.shadow }}>
                 <View className="flex flex-row flex-wrap mb-2">
                     {daysOfWeek.map((day, index) => (
                         <View key={`${day}-${index}`} className="w-[14.28%] flex items-center justify-center py-2">

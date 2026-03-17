@@ -3,7 +3,8 @@ import { View, Text, ScrollView } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useAuth } from '@/src/contexts/auth-context';
 import MenuElement from '@/src/components/MenuElement';
-import { Redirect } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
+import { useTheme } from '@/src/contexts/theme-context';
 
 type MenuItemProps = {
     iconName: keyof typeof Feather.glyphMap;
@@ -20,6 +21,8 @@ const menuItems: MenuItemProps[] = [
 
 export default function ProfileScreen() {
     const { user, logout, isAuthenticated } = useAuth();
+    const router = useRouter();
+    const { colors } = useTheme();
 
     const handleLogout = async () => {
         try {
@@ -35,11 +38,11 @@ export default function ProfileScreen() {
 
     return (
         <ScrollView className='px-5 pt-[70px]'>
-            <View className="flex-row items-center bg-white rounded-3xl p-5 mb-5 shadow-sm">
-                <View className="h-14 w-14 rounded-full border-2 border-blue-400 items-center justify-center">
-                    <Feather name="user" size={24} color="#60a5fa" />
+            <View className="flex-row items-center bg-white rounded-3xl p-5 mb-5" style={{ boxShadow: colors.shadow }}>
+                <View className="h-14 w-14 rounded-full border-2 items-center justify-center" style={{ borderColor: colors.ind_good }}>
+                    <Feather name="user" size={24} color={colors.ind_good} />
                 </View>
-                <Text className="text-xl text-blue-500 font-semibold ml-4">
+                <Text className="text-xl font-semibold ml-4" style={{ color: colors.ind_good }}>
                     {user?.first_name} {user?.last_name}
                 </Text>
             </View>
@@ -50,6 +53,7 @@ export default function ProfileScreen() {
                         iconLeft={item.iconName}
                         title={item.title}
                         iconRight="chevron-right"
+                        onPress={() => router.push(`/(pages)/theme`)}
                     />))}
                 <MenuElement
                     key={menuItems.length}
