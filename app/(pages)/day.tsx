@@ -25,7 +25,7 @@ const monthNames = [
 export default function DayScreen() {
     const { day, month, year } = useLocalSearchParams();
     const router = useRouter();
-    const { data: eventData } = useGetEvent(`${year}-${month}-${day}`)
+    const { data: eventData, isLoading } = useGetEvent(`${year}-${month}-${day}`)
     const today = new Date();
     const currentDate = new Date(Number(year), Number(month) - 1, Number(day));
     const isToday = currentDate.getDate() === today.getDate()
@@ -90,6 +90,7 @@ export default function DayScreen() {
                     widgetDate={`${year}-${month}-${day}`}
                     showText={false}
                     selectedState={eventData?.data?.emotional_state}
+                    isLoading={isLoading}
                 />
                 {eventData?.data && <SlidersWidget eventData={eventData.data} />}
             </ScrollView>
