@@ -45,7 +45,7 @@ export default function CalendarDay({ day, emotionalState, month, year, today, o
     }
 
     if (inStreak) {
-        dayStyle += " bg-[#ff9506]/60"
+        dayStyle += " bg-streak/40"
     }
 
     return (
