@@ -35,7 +35,7 @@ export default function BottomBar() {
                             key={tab.name}
                             activeOpacity={0.7}
                             className="flex-row items-center rounded-full px-5 py-3"
-                            style={{ backgroundColor: colors.ind_good }}
+                            style={{ backgroundColor: colors.interface }}
                             onPress={() => router.push(tab.route)}
                         >
                             <Feather name={tab.icon} size={20} color="white" />
