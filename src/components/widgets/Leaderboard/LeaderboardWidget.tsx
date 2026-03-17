@@ -22,7 +22,7 @@ export default function LeaderboardWidget({ leaderboardData, isLoading }: Leader
                 className="w-40 h-40 bg-white rounded-[1000px] flex items-center justify-center mx-3 my-3"
                 style={{ boxShadow: colors.shadow }}
             >
-                <Octicons name="trophy" size={80} color={colors.ind_good} />
+                <Octicons name="trophy" size={80} color={colors.interface} />
             </View>
             <View className="w-full mt-2">
                 {isLoading ? (

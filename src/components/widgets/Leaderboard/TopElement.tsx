@@ -27,7 +27,7 @@ export default function TopElement({ user, isActiveUser, index }: TopElementProp
             textColor = { color: colors.ind_good }
             break;
     }
-    if (isActiveUser) textColor = { color: colors.ind_good }
+    if (isActiveUser) textColor = { color: colors.interface }
     return (
         <TouchableOpacity
             className={`flex-row items-center justify-between bg-white rounded-3xl px-5 py-4 mb-2`}

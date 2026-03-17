@@ -1,9 +1,6 @@
 export type ThemeName = 'white' | 'blue';
 
 export interface ThemeColors {
-    gold: string,
-    silver: string,
-    bronze: string,
     primary: string,
     secondary: string,
     background: string,
@@ -13,6 +10,10 @@ export interface ThemeColors {
     ind_bad: string,
     streak: string,
     shadow: string,
+    interface: string,
+    gold: string,
+    silver: string,
+    bronze: string,
 }
 
 export const themes: Record<ThemeName, ThemeColors> = {
@@ -28,7 +29,8 @@ export const themes: Record<ThemeName, ThemeColors> = {
         ind_neutral: '#22AFF6',
         ind_bad: '#CD81FF',
         streak: '#FF9500',
-        shadow: "0px 1px 0px 2px #E4E4E4"
+        shadow: "0px 1px 0px 2px #E4E4E4",
+        interface: "#9d9d9dff"
     },
     blue: {
         gold: "#EAB308",
@@ -42,6 +44,7 @@ export const themes: Record<ThemeName, ThemeColors> = {
         ind_neutral: '#5A4FCF',
         ind_bad: '#5846A8',
         streak: '#5C8DFF',
-        shadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)"
+        shadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        interface: "#5C8DFF"
     },
 };

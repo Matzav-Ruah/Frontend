@@ -39,10 +39,10 @@ export default function ProfileScreen() {
     return (
         <ScrollView className='px-5 pt-[70px]'>
             <View className="flex-row items-center bg-white rounded-3xl p-5 mb-5" style={{ boxShadow: colors.shadow }}>
-                <View className="h-14 w-14 rounded-full border-2 items-center justify-center" style={{ borderColor: colors.ind_good }}>
-                    <Feather name="user" size={24} color={colors.ind_good} />
+                <View className="h-14 w-14 rounded-full border-2 items-center justify-center" style={{ borderColor: colors.interface }}>
+                    <Feather name="user" size={24} color={colors.interface} />
                 </View>
-                <Text className="text-xl font-semibold ml-4" style={{ color: colors.ind_good }}>
+                <Text className="text-xl font-semibold ml-4" style={{ color: colors.interface }}>
                     {user?.first_name} {user?.last_name}
                 </Text>
             </View>
