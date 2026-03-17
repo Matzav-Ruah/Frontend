@@ -31,6 +31,12 @@ const daysOfWeek = [
     'В'
 ]
 
+interface dayScheme {
+    day: number | null,
+    emotionalState: "good" | "neutral" | "bad" | null,
+    inStreak: boolean
+}
+
 
 export default function CalendarWidget() {
     const router = useRouter();
@@ -48,7 +54,7 @@ export default function CalendarWidget() {
     }, [currentDate])
 
     const eventMap = useMemo(() => {
-        const map: Record<string, { emotionalState: string, inStreak: boolean }> = {};
+        const map: Record<string, { emotionalState: "good" | "neutral" | "bad", inStreak: boolean }> = {};
         if (!events?.data) return map;
 
         for (const event of events.data) {
@@ -68,7 +74,9 @@ export default function CalendarWidget() {
         const firstDay = new Date(y, m, 1).getDay();
         const offset = firstDay === 0 ? 6 : firstDay - 1;
         const monthStr = String(m + 1).padStart(2, "0");
-        const days = Array(offset).fill({ day: null, emotionalState: null });
+        const days: dayScheme[] = Array(offset).fill(null).map(
+            () => ({ day: null, emotionalState: null, inStreak: false })
+        );
 
         for (let i = 1; i <= daysInMonth; i++) {
             const dayStr = String(i).padStart(2, "0");
@@ -116,6 +124,9 @@ export default function CalendarWidget() {
                 </View>
                 <View className="flex flex-row flex-wrap">
                     {monthGrid.map((day, index) => {
+                        const isStreakStart = day.inStreak && (!monthGrid[index - 1]?.inStreak || index % 7 === 0);
+                        const isStreakEnd = day.inStreak && (!monthGrid[index + 1]?.inStreak || index % 7 === 6);
+
                         return <CalendarDay
                             key={`day-${index}`}
                             year={year}
@@ -124,11 +135,13 @@ export default function CalendarWidget() {
                             emotionalState={day.emotionalState}
                             today={removeTimezone(today)}
                             inStreak={day.inStreak}
+                            isStreakStart={isStreakStart}
+                            isStreakEnd={isStreakEnd}
                             onPress={() => {
                                 router.push({
                                     pathname: "/(pages)/day",
                                     params: {
-                                        day: normalizeDate(day.day),
+                                        day: normalizeDate(day.day!),
                                         month: month,
                                         year: year,
                                     }

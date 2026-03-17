@@ -1,16 +1,29 @@
 import { View, TouchableOpacity, Text } from "react-native";
 
 interface CalendarDayProps {
-    day: number;
-    emotionalState: "good" | "neutral" | "bad";
+    day: number | null;
+    emotionalState: "good" | "neutral" | "bad" | null;
     month: string;
     year: string;
     today: string;
     onPress: () => void;
     inStreak: boolean;
+    isStreakStart?: boolean;
+    isStreakEnd?: boolean;
 }
 
-export default function CalendarDay({ day, emotionalState, month, year, today, onPress, inStreak }: CalendarDayProps) {
+export default function CalendarDay(
+    {
+        day,
+        emotionalState,
+        month,
+        year,
+        today,
+        onPress,
+        inStreak,
+        isStreakStart,
+        isStreakEnd
+    }: CalendarDayProps) {
     if (!day) return <View className="w-[14.28%] aspect-square" />
     let textStyle = "text-primary"
     let dayStyle = "border border-light_third"
@@ -44,12 +57,14 @@ export default function CalendarDay({ day, emotionalState, month, year, today, o
         textStyle = "text-secondary/50"
     }
 
-    if (inStreak) {
-        dayStyle += " bg-streak/40"
-    }
-
     return (
         <View className="w-[14.28%] aspect-square items-center justify-center py-1">
+            {inStreak && (
+                <View className="absolute flex-row w-full h-9 items-center justify-center">
+                    <View className={`h-9 bg-third/20 absolute left-0 right-1/2 ${isStreakStart ? 'rounded-l-full ml-[15%]' : ''}`} />
+                    <View className={`h-9 bg-third/20 absolute left-1/2 right-0 ${isStreakEnd ? 'rounded-r-full mr-[15%]' : ''}`} />
+                </View>
+            )}
             <TouchableOpacity
                 className={`w-9 h-9 flex items-center justify-center rounded-full ${dayStyle}`}
                 key={`day-${day}`}
