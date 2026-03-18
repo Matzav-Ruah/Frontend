@@ -17,21 +17,24 @@ export function useCreateEventMutation(widgetDate: string) {
             queryClient.cancelQueries({
                 queryKey: ["user", "streak"],
             });
-            const previousData = queryClient.getQueryData(["events", widgetDate]);
+            const previousData = queryClient.getQueryData<ApiResponse<EventSchema | null>>(["events", widgetDate]);
             const previousAllEventsData = queryClient.getQueryData<ApiResponse<EventSchema[]>>(["events", "all"]);
             const previousStreakData = queryClient.getQueryData<ApiResponse<StreakSchema>>(["user", "streak"]);
+            const nowIso = new Date().toISOString();
+            const previousEventForDate = previousAllEventsData?.data?.find((event: any) => event.date === widgetDate) as any | undefined;
+            const optimisticInStreak = previousData?.data?.in_streak ?? previousEventForDate?.in_streak ?? false;
             queryClient.setQueryData(
                 ["events", widgetDate],
                 {
                     success: true,
                     data: {
-                        id: 0,
+                        id: previousData?.data?.id ?? previousEventForDate?.id ?? 0,
                         date: widgetDate,
                         emotional_state: data.emotional_state,
                         event_data: data.event_data,
-                        created_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString(),
-                        in_streak: false,
+                        created_at: previousData?.data?.created_at ?? previousEventForDate?.created_at ?? nowIso,
+                        updated_at: nowIso,
+                        in_streak: optimisticInStreak,
                     }
                 },
             );
@@ -39,15 +42,21 @@ export function useCreateEventMutation(widgetDate: string) {
                 ["events", "all"],
                 {
                     success: true,
-                    data: [...(previousAllEventsData?.data ?? []), {
-                        id: 0,
-                        date: widgetDate,
-                        emotional_state: data.emotional_state,
-                        event_data: data.event_data,
-                        created_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString(),
-                        in_streak: false,
-                    }]
+                    data: (() => {
+                        const prev = previousAllEventsData?.data ?? [];
+                        const nextEvent = {
+                            id: previousEventForDate?.id ?? 0,
+                            date: widgetDate,
+                            emotional_state: data.emotional_state,
+                            event_data: data.event_data,
+                            created_at: previousEventForDate?.created_at ?? nowIso,
+                            updated_at: nowIso,
+                            in_streak: optimisticInStreak,
+                        } as any;
+
+                        const exists = prev.some((event: any) => event.date === widgetDate);
+                        return exists ? prev.map((event: any) => (event.date === widgetDate ? nextEvent : event)) : [...prev, nextEvent];
+                    })()
                 }
             );
             queryClient.setQueryData(
@@ -97,7 +106,13 @@ export function useUpdateEventMutation(widgetDate: string) {
             queryClient.cancelQueries({
                 queryKey: ["events", widgetDate],
             });
+            queryClient.cancelQueries({
+                queryKey: ["events", "all"],
+            });
+
             const previousData: any = queryClient.getQueryData(["events", widgetDate]);
+            const previousAllEventsData = queryClient.getQueryData<ApiResponse<EventSchema[]>>(["events", "all"]);
+            const nowIso = new Date().toISOString();
             if (previousData?.data) {
                 queryClient.setQueryData(["events", widgetDate], {
                     ...previousData,
@@ -114,13 +129,31 @@ export function useUpdateEventMutation(widgetDate: string) {
                         date: widgetDate,
                         emotional_state: variables.emotional_state,
                         event_data: variables.event_data || {},
-                        created_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString(),
+                        created_at: nowIso,
+                        updated_at: nowIso,
                         in_streak: false,
                     }
                 });
             }
-            return { previousData };
+            if (previousAllEventsData?.data && variables.emotional_state !== undefined) {
+                queryClient.setQueryData(
+                    ["events", "all"],
+                    {
+                        success: previousAllEventsData.success,
+                        data: previousAllEventsData.data.map((event: any) => {
+                            if (event.date !== widgetDate) return event;
+                            return {
+                                ...event,
+                                emotional_state: variables.emotional_state ?? event.emotional_state,
+                                event_data: variables.event_data ?? event.event_data,
+                                updated_at: nowIso,
+                            };
+                        })
+                    }
+                );
+            }
+
+            return { previousData, previousAllEventsData };
         },
         onSuccess: (data) => {
             queryClient.setQueryData(["events", widgetDate], data);
@@ -129,10 +162,16 @@ export function useUpdateEventMutation(widgetDate: string) {
             if (context?.previousData) {
                 queryClient.setQueryData(["events", widgetDate], context?.previousData);
             }
+            if (context?.previousAllEventsData) {
+                queryClient.setQueryData(["events", "all"], context?.previousAllEventsData);
+            }
         },
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: ["events", widgetDate],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["events", "all"],
             });
         }
     });
@@ -174,7 +213,7 @@ export function useDeleteEventMutation(widgetDate: string) {
             });
             queryClient.setQueryData(["user", "streak"], {
                 success: true,
-                data: { streak_count: (previousStreakData?.data?.streak_count ?? 0) - 1 }
+                data: { streak_count: Math.max(0, (previousStreakData?.data?.streak_count ?? 0) - 1) }
             });
             return { previousData, previousStreakData, previousAllEventsData };
         },
