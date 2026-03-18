@@ -1,8 +1,9 @@
 import { View } from "react-native";
 import SliderElement from "./SliderElement";
 import { useUpdateEventMutation } from "@/src/mutations/events.mutations";
-import { EventSchema } from "@/src/api/events/events.types";
+import { useGetEvent } from "@/src/hooks/events.hooks";
 import { useTheme } from "@/src/contexts/theme-context";
+import { useQueryClient } from "@tanstack/react-query";
 
 const defaultSliders = [
     {
@@ -30,9 +31,14 @@ const defaultSliders = [
 
 
 
-export default function SlidersWidget({ eventData }: { eventData: EventSchema }) {
-    const { updateEvent } = useUpdateEventMutation(eventData?.date);
+export default function SlidersWidget({ widgetDate }: { widgetDate: string }) {
     const { colors } = useTheme();
+    const { data: eventDataResponse } = useGetEvent(widgetDate);
+    const eventData = eventDataResponse?.data;
+    const { updateEvent } = useUpdateEventMutation(widgetDate);
+    const queryClient = useQueryClient();
+    
+    if (!eventData) return null;
 
     const defaultValues = {
         "bad": {
@@ -64,13 +70,18 @@ export default function SlidersWidget({ eventData }: { eventData: EventSchema })
                             eventData.event_data[slider.name] as number ??
                             defaultValues[eventData.emotional_state].defaultValue
                         )}
-                        onUpdate={(value) => updateEvent({
-                            date: eventData.date,
-                            event_data: {
-                                ...eventData.event_data,
-                                [slider.name]: value,
-                            },
-                        })}
+                        onUpdate={(value) => {
+                            const latestCache = queryClient.getQueryData<any>(["events", widgetDate]);
+                            const latestEventData = latestCache?.data?.event_data || eventData.event_data || {};
+
+                            updateEvent({
+                                date: eventData.date,
+                                event_data: {
+                                    ...latestEventData,
+                                    [slider.name]: value,
+                                },
+                            });
+                        }}
                         color={defaultValues[eventData.emotional_state].color}
                     />
                 ))}

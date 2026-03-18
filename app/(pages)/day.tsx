@@ -1,7 +1,6 @@
 
 import { ScrollView, View, Text, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useGetEvent } from "@/src/hooks/events.hooks";
 import EmotionalWidget from "@/src/components/widgets/EmotionalWidget";
 import { Feather } from "@expo/vector-icons";
 import { normalizeDate } from "@/src/utils/utils";
@@ -27,7 +26,7 @@ export default function DayScreen() {
     const { colors } = useTheme();
     const { day, month, year } = useLocalSearchParams();
     const router = useRouter();
-    const { data: eventData, isLoading } = useGetEvent(`${year}-${month}-${day}`)
+    const widgetDate = `${year}-${month}-${day}`;
     const today = new Date();
     const currentDate = new Date(Number(year), Number(month) - 1, Number(day));
     const isToday = currentDate.getDate() === today.getDate()
@@ -89,12 +88,10 @@ export default function DayScreen() {
                     </TouchableOpacity>
                 </View>
                 <EmotionalWidget
-                    widgetDate={`${year}-${month}-${day}`}
+                    widgetDate={widgetDate}
                     showText={false}
-                    selectedState={eventData?.data?.emotional_state}
-                    isLoading={isLoading}
                 />
-                {eventData?.data && <SlidersWidget eventData={eventData.data} />}
+                <SlidersWidget widgetDate={widgetDate} />
             </ScrollView>
         </View>
     );

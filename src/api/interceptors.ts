@@ -48,17 +48,7 @@ apiClient.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      console.error('Unauthorized - session expired or invalid');
       await clearAuthData();
-    }
-
-    if (error.response) {
-      const { status, data } = error.response;
-      console.error(`API Error [${status}]:`, data);
-    } else if (error.request) {
-      console.error('Network error:', error.message);
-    } else {
-      console.error('Error:', error.message);
     }
 
     return Promise.reject(error);
