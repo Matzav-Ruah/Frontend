@@ -1,35 +1,49 @@
 import { useCreateEventMutation, useDeleteEventMutation, useUpdateEventMutation } from "@/src/mutations/events.mutations";
+import { useGetEvent } from "@/src/hooks/events.hooks";
 import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 import * as Haptics from "expo-haptics";
 import Skeleton from "@/src/components/Skeleton";
 import { useTheme } from "@/src/contexts/theme-context";
+import { useEffect, useState } from "react";
+import { useDebaunce } from "@/src/hooks/useDebaunce";
 
 interface EmotionalWidgetProps {
     widgetDate: string;
     showText?: boolean;
-    selectedState?: "bad" | "neutral" | "good";
-    isLoading?: boolean;
 }
 
-export default function EmotionalWidget({ widgetDate, showText = true, selectedState, isLoading }: EmotionalWidgetProps) {
+export default function EmotionalWidget({ widgetDate, showText = true }: EmotionalWidgetProps) {
+    const { data: eventData, isLoading } = useGetEvent(widgetDate);
+    const selectedState = eventData?.data?.emotional_state;
+
     const router = useRouter();
     const { colors } = useTheme();
+    const [localState, setLocalState] = useState<"bad" | "neutral" | "good" | undefined>(selectedState);
+    const debouncedState = useDebaunce(localState, 500);
     const { createEvent } = useCreateEventMutation(widgetDate);
     const { updateEvent } = useUpdateEventMutation(widgetDate);
     const { deleteEvent } = useDeleteEventMutation(widgetDate);
 
     const handleClick = (state: "bad" | "neutral" | "good") => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
-        if (selectedState && selectedState !== state) {
-            updateEvent({ date: widgetDate, emotional_state: state });
-            return;
-        } else if (selectedState && selectedState === state) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+        setLocalState((prev) => (prev === state ? undefined : state));
+    };
+
+    useEffect(() => {
+        setLocalState(selectedState);
+    }, [selectedState]);
+
+    useEffect(() => {
+        if (debouncedState === selectedState) return;
+        if (debouncedState && !selectedState) {
+            createEvent({ emotional_state: debouncedState, event_data: {}, date: widgetDate });
+        } else if (debouncedState && selectedState) {
+            updateEvent({ date: widgetDate, emotional_state: debouncedState });
+        } else if (!debouncedState && selectedState) {
             deleteEvent(widgetDate);
-            return;
         }
-        createEvent({ emotional_state: state, event_data: {}, date: widgetDate });
-    }
+    }, [debouncedState]);
 
     const handleOpenDay = () => {
         router.push({
@@ -65,21 +79,21 @@ export default function EmotionalWidget({ widgetDate, showText = true, selectedS
                     <TouchableOpacity
                         onPress={() => handleClick("bad")}
                         className="rounded-full px-2 py-4 flex-1 items-center justify-center"
-                        style={{ backgroundColor: selectedState === "bad" ? colors.ind_bad : "#E5E7EB" }}
+                        style={{ backgroundColor: localState === "bad" ? colors.ind_bad : "#E5E7EB" }}
                     >
                         <Text numberOfLines={1} className="text-white font-medium text-[14px]">Плохо</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => handleClick("neutral")}
                         className="rounded-full px-2 py-4 flex-[1.4] items-center justify-center mx-1"
-                        style={{ backgroundColor: selectedState === "neutral" ? colors.ind_neutral : "#E5E7EB" }}
+                        style={{ backgroundColor: localState === "neutral" ? colors.ind_neutral : "#E5E7EB" }}
                     >
                         <Text numberOfLines={1} className="text-white font-medium text-[14px]">Нормально</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => handleClick("good")}
                         className="rounded-full px-2 py-4 flex-1 items-center justify-center"
-                        style={{ backgroundColor: selectedState === "good" ? colors.ind_good : "#E5E7EB" }}
+                        style={{ backgroundColor: localState === "good" ? colors.ind_good : "#E5E7EB" }}
                     >
                         <Text numberOfLines={1} className="text-white font-medium text-[14px]">Хорошо</Text>
                     </TouchableOpacity>
