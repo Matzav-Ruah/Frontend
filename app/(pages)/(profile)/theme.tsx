@@ -32,7 +32,7 @@ export default function ThemesScreen() {
                             <TouchableOpacity
                                 key={theme.name}
                                 onPress={() => changeTheme(theme.name)}
-                                className={`w-full rounded-3xl py-5 mb-4 ${isCurrentTheme ? "bg-gray-300" : "bg-white"}`}
+                                className={`w-full rounded-3xl py-5 mb-4 ${isCurrentTheme ? "bg-gray-300 border-2 border-gray-400/20" : "bg-white"}`}
                                 style={isCurrentTheme ? undefined : { boxShadow: colors.shadow }}
                             >
                                 <View
@@ -41,7 +41,7 @@ export default function ThemesScreen() {
                                     {isCurrentTheme && <Feather name="chevron-right" size={20} color={colors.primary} />}
                                     <Text
                                         numberOfLines={1}
-                                        className="font-medium text-[14px]"
+                                        className="font-medium text-lg"
                                         style={{ color: colors.primary }}
                                     >{theme.title}</Text>
                                     {isCurrentTheme && <Feather name="chevron-left" size={20} color={colors.primary} />}
