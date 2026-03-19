@@ -1,22 +1,21 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useAuth } from '@/src/contexts/auth-context';
 import MenuElement from '@/src/components/MenuElement';
-import { Redirect, useRouter } from 'expo-router';
+import { Redirect, useRouter, Href } from 'expo-router';
 import { useTheme } from '@/src/contexts/theme-context';
 
 type MenuItemProps = {
     iconName: keyof typeof Feather.glyphMap;
     title: string;
-    name: string;
+    route: Href;
 };
 
 const menuItems: MenuItemProps[] = [
-    { iconName: 'file-text', title: 'Личные данные', name: 'profile' },
-    { iconName: 'bell', title: 'Уведомления', name: 'notifications' },
-    { iconName: 'sun', title: 'Оформление', name: 'theme' },
-    { iconName: 'headphones', title: 'Поддержка', name: 'support' },
+    { iconName: 'bell', title: 'Уведомления', route: '/(pages)/(profile)/notifications' },
+    { iconName: 'sun', title: 'Оформление', route: '/(pages)/(profile)/theme' },
+    { iconName: 'headphones', title: 'Поддержка', route: '/(pages)/(profile)/support' },
 ];
 
 export default function ProfileScreen() {
@@ -38,14 +37,19 @@ export default function ProfileScreen() {
 
     return (
         <ScrollView className='px-5 pt-[70px]'>
-            <View className="flex-row items-center bg-white rounded-3xl p-5 mb-5" style={{ boxShadow: colors.shadow }}>
-                <View className="h-14 w-14 rounded-full border-2 items-center justify-center" style={{ borderColor: colors.interface }}>
-                    <Feather name="user" size={24} color={colors.interface} />
+            <TouchableOpacity onPress={() => router.push('/(pages)/(profile)/account')}>
+                <View className="flex-row items-center bg-white rounded-3xl p-5 mb-5 justify-between" style={{ boxShadow: colors.shadow }}>
+                    <View className="flex-row items-center">
+                        <View className="h-14 w-14 rounded-full border-2 items-center justify-center" style={{ borderColor: colors.interface }}>
+                            <Feather name="user" size={24} color={colors.interface} />
+                        </View>
+                        <Text className="text-xl font-semibold ml-4" style={{ color: colors.interface }}>
+                            {user?.first_name} {user?.last_name}
+                        </Text>
+                    </View>
+                    <Feather name="chevron-right" size={20} color={colors.interface} />
                 </View>
-                <Text className="text-xl font-semibold ml-4" style={{ color: colors.interface }}>
-                    {user?.first_name} {user?.last_name}
-                </Text>
-            </View>
+            </TouchableOpacity>
             <View className="space-y-4">
                 {menuItems.map((item, index) => (
                     <MenuElement
@@ -53,8 +57,9 @@ export default function ProfileScreen() {
                         iconLeft={item.iconName}
                         title={item.title}
                         iconRight="chevron-right"
-                        onPress={() => router.push(`/(pages)/theme`)}
+                        onPress={() => router.push(item.route)}
                     />))}
+                <View className="h-1" />
                 <MenuElement
                     key={menuItems.length}
                     title="Выйти"
@@ -64,6 +69,6 @@ export default function ProfileScreen() {
                     iconRightColor='red'
                 />
             </View>
-        </ScrollView>
+        </ScrollView >
     );
 }
