@@ -32,7 +32,10 @@ export const saveSettings = async (settings: ReminderSettings) => {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 };
 
-export const scheduleReminder = async (timeValue: string, previousId?: string | null) => {
+export const scheduleReminder = async (
+    timeValue: string,
+    previousId?: string | null,
+) => {
     if (previousId) {
         await Notifications.cancelScheduledNotificationAsync(previousId);
     }
@@ -48,21 +51,21 @@ export const scheduleReminder = async (timeValue: string, previousId?: string | 
     const trigger: Notifications.NotificationTriggerInput =
         Platform.OS === "android"
             ? ({
-                type: Notifications.SchedulableTriggerInputTypes.DAILY,
-                hour,
-                minute,
-            } as Notifications.DailyTriggerInput)
+                  type: Notifications.SchedulableTriggerInputTypes.DAILY,
+                  hour,
+                  minute,
+              } as Notifications.DailyTriggerInput)
             : ({
-                type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
-                hour,
-                minute,
-                repeats: true,
-            } as Notifications.CalendarTriggerInput);
+                  type: Notifications.SchedulableTriggerInputTypes.CALENDAR,
+                  hour,
+                  minute,
+                  repeats: true,
+              } as Notifications.CalendarTriggerInput);
 
     const id = await Notifications.scheduleNotificationAsync({
         content: {
-            title: "Напоминание",
-            body: "Зайдите в приложение и отметьте ваш день.",
+            title: "MatzavRuah",
+            body: "Не забуь отметить свое состояние за сегодня ",
             sound: true,
         },
         trigger,
