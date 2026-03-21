@@ -5,7 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { useEffect, useMemo, useState } from "react";
 import { Alert, ScrollView, Text, TextInput, View } from "react-native";
-import { DEFAULT_TIME, ReminderSettings, STORAGE_KEY, requestPermissions, saveSettings, scheduleReminder } from "@/src/utils/notifications";
+import {
+    DEFAULT_TIME,
+    ReminderSettings,
+    STORAGE_KEY,
+    requestPermissions,
+    saveSettings,
+    scheduleReminder,
+} from "@/src/utils/notifications";
 
 export default function SupportScreen() {
     const { colors } = useTheme();
@@ -14,7 +21,10 @@ export default function SupportScreen() {
     const [notificationId, setNotificationId] = useState<string | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const isValidTime = useMemo(() => /^([01]\d|2[0-3]):([0-5]\d)$/.test(time), [time]);
+    const isValidTime = useMemo(
+        () => /^([01]\d|2[0-3]):([0-5]\d)$/.test(time),
+        [time],
+    );
 
     useEffect(() => {
         const loadSettings = async () => {
@@ -44,13 +54,19 @@ export default function SupportScreen() {
 
         if (!notifications) {
             if (!isValidTime) {
-                Alert.alert("Некорректное время", "Введите время в формате HH:MM.");
+                Alert.alert(
+                    "Некорректное время",
+                    "Введите время в формате HH:MM.",
+                );
                 return;
             }
 
             const granted = await requestPermissions();
             if (!granted) {
-                Alert.alert("Нет доступа", "Разрешите уведомления в настройках устройства.");
+                Alert.alert(
+                    "Нет доступа",
+                    "Разрешите уведомления в настройках устройства.",
+                );
                 return;
             }
 
@@ -62,7 +78,9 @@ export default function SupportScreen() {
         }
 
         if (notificationId) {
-            await Notifications.cancelScheduledNotificationAsync(notificationId);
+            await Notifications.cancelScheduledNotificationAsync(
+                notificationId,
+            );
         }
         setNotifications(false);
         setNotificationId(null);
@@ -74,7 +92,11 @@ export default function SupportScreen() {
         if (!isLoaded) return;
 
         if (!notifications) {
-            await saveSettings({ enabled: false, time: value, notificationId: null });
+            await saveSettings({
+                enabled: false,
+                time: value,
+                notificationId: null,
+            });
             return;
         }
 
@@ -107,7 +129,12 @@ export default function SupportScreen() {
                     style={{ boxShadow: colors.shadow }}
                 >
                     <View className="flex-row items-center">
-                        <Feather name="bell" size={22} color={colors.primary} className="mr-4" />
+                        <Feather
+                            name="bell"
+                            size={22}
+                            color={colors.primary}
+                            className="mr-4"
+                        />
                         <Text
                             className={`text-[16px] font-medium`}
                             style={{ color: colors.primary }}
@@ -117,30 +144,41 @@ export default function SupportScreen() {
                     </View>
                     <Switch isOn={notifications} onToggle={onToggle} />
                 </View>
-                <View
-                    className={`bg-white rounded-3xl px-5 py-5`}
-                    style={{ boxShadow: colors.shadow }}
-                >
-                    <Text className="text-[14px] mb-2" style={{ color: colors.primary }}>
-                        Время напоминания (HH:MM)
-                    </Text>
-                    <TextInput
-                        value={time}
-                        onChangeText={onTimeChange}
-                        keyboardType="numbers-and-punctuation"
-                        maxLength={5}
-                        placeholder="20:00"
-                        placeholderTextColor={colors.interface}
-                        className="border rounded-2xl px-4 py-3 text-[16px]"
-                        style={{ color: colors.primary, borderColor: colors.secondary }}
-                    />
-                    {!isValidTime && (
-                        <Text className="text-xs mt-2" style={{ color: colors.ind_bad }}>
-                            Формат времени: HH:MM
+                {notifications && (
+                    <View
+                        className={`bg-white rounded-3xl px-5 py-5`}
+                        style={{ boxShadow: colors.shadow }}
+                    >
+                        <Text
+                            className="text-[14px] mb-2"
+                            style={{ color: colors.primary }}
+                        >
+                            Время напоминания (HH:MM)
                         </Text>
-                    )}
-                </View>
+                        <TextInput
+                            value={time}
+                            onChangeText={onTimeChange}
+                            keyboardType="numbers-and-punctuation"
+                            maxLength={5}
+                            placeholder="20:00"
+                            placeholderTextColor={colors.interface}
+                            className="border rounded-2xl px-4 py-3 text-[16px]"
+                            style={{
+                                color: colors.primary,
+                                borderColor: colors.secondary,
+                            }}
+                        />
+                        {!isValidTime && (
+                            <Text
+                                className="text-xs mt-2"
+                                style={{ color: colors.ind_bad }}
+                            >
+                                Формат времени: HH:MM
+                            </Text>
+                        )}
+                    </View>
+                )}
             </ScrollView>
         </View>
-    )
+    );
 }
