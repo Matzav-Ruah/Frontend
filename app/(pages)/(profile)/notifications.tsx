@@ -22,6 +22,7 @@ import {
 import RNDateTimePicker, {
     DateTimePickerChangeEvent,
 } from "@react-native-community/datetimepicker";
+import * as Haptics from "expo-haptics";
 
 export default function SupportScreen() {
     const { colors } = useTheme();
@@ -52,6 +53,7 @@ export default function SupportScreen() {
     }, []);
 
     const onToggle = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
         if (!showNotifications) {
             const granted = await requestPermissions();
             if (!granted) {
@@ -97,6 +99,7 @@ export default function SupportScreen() {
         _: DateTimePickerChangeEvent,
         selectedDate: Date,
     ) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
         setShowPicker(false);
 
         const newHour = selectedDate.getHours();

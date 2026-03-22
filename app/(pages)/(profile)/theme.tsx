@@ -1,12 +1,13 @@
-import { useTheme, useThemeDispatch } from '@/src/contexts/theme-context';
-import { ThemeName } from '@/src/theme/colors';
-import { Feather } from '@expo/vector-icons';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { useTheme, useThemeDispatch } from "@/src/contexts/theme-context";
+import { ThemeName } from "@/src/theme/colors";
+import { Feather } from "@expo/vector-icons";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import * as Haptics from "expo-haptics";
 
-const themesList: { name: ThemeName, title: string }[] = [
-    { name: "white", "title": "Белый" },
-    { name: "blue", "title": "Голубой" },
-]
+const themesList: { name: ThemeName; title: string }[] = [
+    { name: "white", title: "Белый" },
+    { name: "blue", title: "Голубой" },
+];
 
 export default function ThemesScreen() {
     const { name, colors } = useTheme();
@@ -31,23 +32,44 @@ export default function ThemesScreen() {
                         return (
                             <TouchableOpacity
                                 key={theme.name}
-                                onPress={() => changeTheme(theme.name)}
+                                onPress={() => {
+                                    Haptics.impactAsync(
+                                        Haptics.ImpactFeedbackStyle.Soft,
+                                    );
+                                    changeTheme(theme.name);
+                                }}
                                 className={`w-full rounded-3xl py-5 mb-4 ${isCurrentTheme ? "bg-gray-300" : "bg-white"}`}
-                                style={isCurrentTheme ? undefined : { boxShadow: colors.shadow }}
+                                style={
+                                    isCurrentTheme
+                                        ? undefined
+                                        : { boxShadow: colors.shadow }
+                                }
                             >
-                                <View
-                                    className="flex-row items-center justify-center gap-3"
-                                >
-                                    {isCurrentTheme && <Feather name="chevron-right" size={20} color={colors.primary} />}
+                                <View className="flex-row items-center justify-center gap-3">
+                                    {isCurrentTheme && (
+                                        <Feather
+                                            name="chevron-right"
+                                            size={20}
+                                            color={colors.primary}
+                                        />
+                                    )}
                                     <Text
                                         numberOfLines={1}
                                         className="font-medium text-[14px]"
                                         style={{ color: colors.primary }}
-                                    >{theme.title}</Text>
-                                    {isCurrentTheme && <Feather name="chevron-left" size={20} color={colors.primary} />}
+                                    >
+                                        {theme.title}
+                                    </Text>
+                                    {isCurrentTheme && (
+                                        <Feather
+                                            name="chevron-left"
+                                            size={20}
+                                            color={colors.primary}
+                                        />
+                                    )}
                                 </View>
                             </TouchableOpacity>
-                        )
+                        );
                     })}
                 </View>
             </ScrollView>
