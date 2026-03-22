@@ -7,6 +7,7 @@ export type ReminderSettings = {
     reminderHour: number;
     reminderMinute: number;
     notificationId: string | null;
+    playSound: boolean;
 };
 
 export const STORAGE_KEY = "notifications:reminder-settings";
@@ -36,6 +37,7 @@ export const scheduleReminder = async (
     hour: number,
     minute: number,
     previousId?: string | null,
+    sound?: boolean,
 ) => {
     if (previousId) {
         await Notifications.cancelScheduledNotificationAsync(previousId);
@@ -66,7 +68,7 @@ export const scheduleReminder = async (
         content: {
             title: "MatzavRuah",
             body: "Не забуь отметить свое состояние за сегодня <3",
-            sound: true,
+            sound,
         },
         trigger,
     });

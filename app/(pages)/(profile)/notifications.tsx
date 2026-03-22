@@ -31,6 +31,7 @@ export default function SupportScreen() {
     const [reminderHour, setReminderHour] = useState<number>(20);
     const [reminderMinute, setReminderMinute] = useState<number>(0);
     const [notificationId, setNotificationId] = useState<string | null>(null);
+    const [playSound, setPlaySound] = useState<boolean>(true);
 
     useEffect(() => {
         const loadSettings = async () => {
@@ -43,6 +44,7 @@ export default function SupportScreen() {
                 setReminderHour(parsed.reminderHour ?? 20);
                 setReminderMinute(parsed.reminderMinute ?? 0);
                 setNotificationId(parsed.notificationId ?? null);
+                setPlaySound(parsed.playSound ?? true);
             } catch {
                 setReminderHour(20);
                 setReminderMinute(0);
@@ -68,6 +70,7 @@ export default function SupportScreen() {
                 reminderHour,
                 reminderMinute,
                 notificationId,
+                playSound,
             );
             setNotificationId(id);
             setShowNotifications(true);
@@ -76,6 +79,7 @@ export default function SupportScreen() {
                 reminderHour,
                 reminderMinute,
                 notificationId: id,
+                playSound,
             });
             return;
         }
@@ -92,7 +96,29 @@ export default function SupportScreen() {
             reminderHour,
             reminderMinute,
             notificationId: null,
+            playSound,
         });
+    };
+
+    const onSoundToggle = async () => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+        setPlaySound(!playSound);
+        if (showNotifications) {
+            const id = await scheduleReminder(
+                reminderHour,
+                reminderMinute,
+                notificationId,
+                !playSound,
+            );
+            setNotificationId(id);
+            await saveSettings({
+                enabled: true,
+                reminderHour,
+                reminderMinute,
+                notificationId: id,
+                playSound: !playSound,
+            });
+        }
     };
 
     const onTimeChange = async (
@@ -113,6 +139,7 @@ export default function SupportScreen() {
                 newHour,
                 newMinute,
                 notificationId,
+                playSound,
             );
             setNotificationId(id);
             await saveSettings({
@@ -120,6 +147,7 @@ export default function SupportScreen() {
                 reminderHour: newHour,
                 reminderMinute: newMinute,
                 notificationId: id,
+                playSound,
             });
         }
     };
@@ -131,9 +159,9 @@ export default function SupportScreen() {
                 contentContainerStyle={{ paddingBottom: 140 }}
                 showsVerticalScrollIndicator={false}
             >
-                <View className="flex-1 items-center justify-center">
+                <View className="items-center justify-center mb-5">
                     <Text
-                        className="text-2xl font-medium mb-5"
+                        className="text-2xl font-medium"
                         style={{ color: colors.primary }}
                     >
                         Уведомления
@@ -143,58 +171,90 @@ export default function SupportScreen() {
                     className={`flex-row items-center justify-between bg-white rounded-3xl px-5 py-5 mb-3`}
                     style={{ boxShadow: colors.shadow }}
                 >
-                    <View className="flex-row items-center">
-                        <Feather
-                            name="bell"
-                            size={22}
-                            color={colors.primary}
-                            className="mr-4"
-                        />
-                        <Text
-                            className={`text-[16px] font-medium`}
-                            style={{ color: colors.primary }}
-                        >
-                            Напоминания
-                        </Text>
+                    <View className="flex-1">
+                        <View className="flex-row justify-between items-center mb-1">
+                            <View className="flex-row items-center">
+                                <Feather
+                                    name="bell"
+                                    size={20}
+                                    color={colors.primary}
+                                    style={{ marginRight: 8 }}
+                                />
+                                <Text
+                                    className="text-[17px] font-semibold"
+                                    style={{ color: colors.primary }}
+                                >
+                                    Напоминания
+                                </Text>
+                            </View>
+                            <Switch
+                                isOn={showNotifications}
+                                onToggle={onToggle}
+                            />
+                        </View>
+
+                        {showNotifications && (
+                            <View className="flex-row items-center mt-1">
+                                <Text
+                                    className="text-[14px] opacity-70 mr-2"
+                                    style={{ color: colors.primary }}
+                                >
+                                    {reminderHour >= 18
+                                        ? "Каждый вечер в"
+                                        : reminderHour >= 12
+                                          ? "Каждый день в"
+                                          : "Каждое утро в"}
+                                </Text>
+                                <Pressable onPress={() => setShowPicker(true)}>
+                                    <TextInput
+                                        value={`${reminderHour.toString().padStart(2, "0")}:${reminderMinute.toString().padStart(2, "0")}`}
+                                        editable={false}
+                                        className="border rounded-lg px-2 py-0.5 text-[14px] font-medium"
+                                        style={{
+                                            color: colors.primary,
+                                            borderColor: colors.secondary,
+                                            backgroundColor: "#f9f9f9",
+                                        }}
+                                    />
+                                </Pressable>
+
+                                {showPicker && (
+                                    <RNDateTimePicker
+                                        mode="time"
+                                        display="default"
+                                        value={(() => {
+                                            const d = new Date();
+                                            d.setHours(reminderHour);
+                                            d.setMinutes(reminderMinute);
+                                            return d;
+                                        })()}
+                                        onValueChange={onTimeChange}
+                                    />
+                                )}
+                            </View>
+                        )}
                     </View>
-                    <Switch isOn={showNotifications} onToggle={onToggle} />
                 </View>
                 {showNotifications && (
                     <View
-                        className={`bg-white rounded-3xl px-5 py-5`}
+                        className={`flex-row items-center justify-between bg-white rounded-3xl px-5 py-5 mb-3`}
                         style={{ boxShadow: colors.shadow }}
                     >
-                        <Text
-                            className="text-[14px] mb-2"
-                            style={{ color: colors.primary }}
-                        >
-                            Время напоминания (HH:MM)
-                        </Text>
-                        <Pressable onPress={() => setShowPicker(true)}>
-                            <TextInput
-                                value={`${reminderHour.toString().padStart(2, "0")}:${reminderMinute.toString().padStart(2, "0")}`}
-                                editable={false}
-                                className="border rounded-2xl px-4 py-3 text-[16px]"
-                                style={{
-                                    color: colors.primary,
-                                    borderColor: colors.secondary,
-                                }}
+                        <View className="flex-row items-center">
+                            <Feather
+                                name="music"
+                                size={20}
+                                color={colors.primary}
+                                style={{ marginRight: 8 }}
                             />
-                        </Pressable>
-                        {showPicker && (
-                            <RNDateTimePicker
-                                mode="time"
-                                display="default"
-                                value={(() => {
-                                    const d = new Date();
-                                    d.setHours(reminderHour);
-                                    d.setMinutes(reminderMinute);
-                                    return d;
-                                })()}
-                                onValueChange={onTimeChange}
-                                onDismiss={() => setShowPicker(false)}
-                            />
-                        )}
+                            <Text
+                                className="text-[17px] font-semibold"
+                                style={{ color: colors.primary }}
+                            >
+                                Звук
+                            </Text>
+                        </View>
+                        <Switch isOn={playSound} onToggle={onSoundToggle} />
                     </View>
                 )}
             </ScrollView>
