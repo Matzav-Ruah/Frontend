@@ -4,12 +4,12 @@ import { Platform } from "react-native";
 
 export type ReminderSettings = {
     enabled: boolean;
-    time: string;
+    reminderHour: number;
+    reminderMinute: number;
     notificationId: string | null;
 };
 
 export const STORAGE_KEY = "notifications:reminder-settings";
-export const DEFAULT_TIME = "20:00";
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -33,7 +33,8 @@ export const saveSettings = async (settings: ReminderSettings) => {
 };
 
 export const scheduleReminder = async (
-    timeValue: string,
+    hour: number,
+    minute: number,
     previousId?: string | null,
 ) => {
     if (previousId) {
@@ -47,7 +48,6 @@ export const scheduleReminder = async (
         });
     }
 
-    const [hour, minute] = timeValue.split(":").map(Number);
     const trigger: Notifications.NotificationTriggerInput =
         Platform.OS === "android"
             ? ({
@@ -65,7 +65,7 @@ export const scheduleReminder = async (
     const id = await Notifications.scheduleNotificationAsync({
         content: {
             title: "MatzavRuah",
-            body: "Не забуь отметить свое состояние за сегодня ",
+            body: "Не забуь отметить свое состояние за сегодня <3",
             sound: true,
         },
         trigger,
