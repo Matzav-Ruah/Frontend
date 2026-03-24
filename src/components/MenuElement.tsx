@@ -14,6 +14,7 @@ interface MenuElementProps {
     elementStyle?: string;
     textStyle?: string;
     onPress?: () => void;
+    disabled?: boolean;
 }
 
 export default function MenuElement({
@@ -25,6 +26,7 @@ export default function MenuElement({
     onPress,
     iconLeftColor,
     iconRightColor,
+    disabled = false,
 }: MenuElementProps) {
     const { colors } = useTheme();
     return (
@@ -33,6 +35,7 @@ export default function MenuElement({
             style={{ boxShadow: colors.shadow }}
             activeOpacity={0.7}
             onPress={onPress ? onPress : undefined}
+            disabled={disabled}
         >
             <View className="flex-row items-center">
                 {iconLeft && (
