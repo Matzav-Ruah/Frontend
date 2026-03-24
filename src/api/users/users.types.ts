@@ -18,6 +18,7 @@ export interface UserSchema {
     created_at: string;
     updated_at: string;
     is_active: boolean;
+    in_leaderboard: boolean;
 }
 
 export interface LoginCredentials extends SignInSchema {}
@@ -44,4 +45,8 @@ export interface StreakSchema {
 export interface UpdateNameSchema {
     first_name: string;
     last_name: string;
+}
+
+export interface UpdateShowInLeaderboardSchema {
+    in_leaderboard: boolean;
 }

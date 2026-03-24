@@ -12,12 +12,14 @@ import {
     LeaderboardSchema,
     StreakSchema,
     UpdateNameSchema,
+    UpdateShowInLeaderboardSchema,
 } from "@/src/api/users/users.types";
 import {
     auth,
     getCurrentStreak,
     getLeaderboard,
     updateName,
+    updateShowInLeaderboard,
 } from "@/src/api/users/users.api";
 
 export const useCurrentUser = (
@@ -116,6 +118,18 @@ export const useUpdateName = (
 ) => {
     return useMutation<UserSchema, ApiError, UpdateNameSchema>({
         mutationFn: async (payload) => await updateName(payload),
+        ...options,
+    });
+};
+
+export const useUpdateShowInLeaderboard = (
+    options?: Omit<
+        UseMutationOptions<UserSchema, ApiError, UpdateShowInLeaderboardSchema>,
+        "mutationFn"
+    >,
+) => {
+    return useMutation<UserSchema, ApiError, UpdateShowInLeaderboardSchema>({
+        mutationFn: async (payload) => await updateShowInLeaderboard(payload),
         ...options,
     });
 };

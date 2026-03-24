@@ -6,6 +6,7 @@ import {
     StreakSchema,
     UserSchema,
     UpdateNameSchema,
+    UpdateShowInLeaderboardSchema,
 } from "./users.types";
 import { ApiResponse } from "../types";
 import { API_CONFIG } from "../config";
@@ -79,6 +80,16 @@ export const updateName = async (
 ): Promise<UserSchema> => {
     const response = await apiClient.post<ApiResponse<UserSchema>>(
         API_CONFIG.ENDPOINTS.USERS.UPDATE_NAME,
+        payload,
+    );
+    return response.data.data;
+};
+
+export const updateShowInLeaderboard = async (
+    payload: UpdateShowInLeaderboardSchema,
+): Promise<UserSchema> => {
+    const response = await apiClient.post<ApiResponse<UserSchema>>(
+        API_CONFIG.ENDPOINTS.USERS.SHOW_IN_LEADERBOARD,
         payload,
     );
     return response.data.data;

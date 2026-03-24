@@ -18,6 +18,7 @@ export const API_CONFIG = {
             LEADERBOARD: "/users/leaderboard",
             STREAK: "/users/get-user-streak",
             UPDATE_NAME: "/users/update-name",
+            SHOW_IN_LEADERBOARD: "/users/show_in_leaderboard",
         },
 
         EVENTS: {
