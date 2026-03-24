@@ -2,7 +2,7 @@ import { Switch } from "@/src/components/Switch";
 import { useTheme } from "@/src/contexts/theme-context";
 import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Notifications from "expo-notifications";
+import { cancelScheduledNotificationAsync } from "expo-notifications";
 import { useEffect, useState } from "react";
 import {
     Alert,
@@ -20,9 +20,9 @@ import {
     scheduleReminder,
 } from "@/src/utils/notifications";
 import RNDateTimePicker, {
-    DateTimePickerChangeEvent,
+    DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import * as Haptics from "expo-haptics";
+import { impactAsync, ImpactFeedbackStyle } from "expo-haptics";
 
 export default function SupportScreen() {
     const { colors } = useTheme();
@@ -55,7 +55,7 @@ export default function SupportScreen() {
     }, []);
 
     const onToggle = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+        impactAsync(ImpactFeedbackStyle.Soft);
         if (!showNotifications) {
             const granted = await requestPermissions();
             if (!granted) {
@@ -85,9 +85,7 @@ export default function SupportScreen() {
         }
 
         if (notificationId) {
-            await Notifications.cancelScheduledNotificationAsync(
-                notificationId,
-            );
+            await cancelScheduledNotificationAsync(notificationId);
         }
         setShowNotifications(false);
         setNotificationId(null);
@@ -101,7 +99,7 @@ export default function SupportScreen() {
     };
 
     const onSoundToggle = async () => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+        impactAsync(ImpactFeedbackStyle.Soft);
         setPlaySound(!playSound);
         if (showNotifications) {
             const id = await scheduleReminder(
@@ -122,10 +120,11 @@ export default function SupportScreen() {
     };
 
     const onTimeChange = async (
-        _: DateTimePickerChangeEvent,
-        selectedDate: Date,
+        _: DateTimePickerEvent,
+        selectedDate: Date | undefined,
     ) => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+        if (!selectedDate) return;
+        impactAsync(ImpactFeedbackStyle.Soft);
         setShowPicker(false);
 
         const newHour = selectedDate.getHours();
@@ -228,7 +227,7 @@ export default function SupportScreen() {
                                             d.setMinutes(reminderMinute);
                                             return d;
                                         })()}
-                                        onValueChange={onTimeChange}
+                                        onChange={onTimeChange}
                                     />
                                 )}
                             </View>

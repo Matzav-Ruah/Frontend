@@ -2,7 +2,7 @@ import { useTheme, useThemeDispatch } from "@/src/contexts/theme-context";
 import { ThemeName } from "@/src/theme/colors";
 import { Feather } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import * as Haptics from "expo-haptics";
+import { impactAsync, ImpactFeedbackStyle } from "expo-haptics";
 
 const themesList: { name: ThemeName; title: string }[] = [
     { name: "white", title: "Белый" },
@@ -33,9 +33,7 @@ export default function ThemesScreen() {
                             <TouchableOpacity
                                 key={theme.name}
                                 onPress={() => {
-                                    Haptics.impactAsync(
-                                        Haptics.ImpactFeedbackStyle.Soft,
-                                    );
+                                    impactAsync(ImpactFeedbackStyle.Soft);
                                     changeTheme(theme.name);
                                 }}
                                 className={`w-full rounded-3xl py-5 mb-4 ${isCurrentTheme ? "bg-gray-300" : "bg-white"}`}
