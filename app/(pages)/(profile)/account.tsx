@@ -4,10 +4,12 @@ import { useTheme } from "@/src/contexts/theme-context";
 import MenuElement from "@/src/components/MenuElement";
 import { useAuth } from "@/src/contexts/auth-context";
 import { useState, useRef, useEffect } from "react";
+import { useUpdateNameMutation } from "@/src/mutations/users.mutations";
 
 export default function AccountScreen() {
     const { colors } = useTheme();
     const { user } = useAuth();
+    const { updateName } = useUpdateNameMutation();
 
     const originalName =
         `${user?.first_name || ""} ${user?.last_name || ""}`.trim();
@@ -36,7 +38,10 @@ export default function AccountScreen() {
     };
 
     const handleSave = () => {
-        console.log("New name saved:", inputValue);
+        updateName({
+            first_name: inputValue.split(" ")[0],
+            last_name: inputValue.split(" ")[1],
+        });
 
         isSaving.current = true;
         setIsEditingName(false);
@@ -82,27 +87,26 @@ export default function AccountScreen() {
                             }}
                             pointerEvents={isEditingName ? "auto" : "none"}
                         />
-                        {isEditingName && (
-                            <View className="absolute right-0 top-0 bottom-0 justify-center items-center">
-                                <Pressable
-                                    className="p-2 mr-2"
-                                    onPressIn={() => {
-                                        isSaving.current = true;
-                                    }}
-                                    onPress={handleSave}
-                                >
-                                    <Feather
-                                        name="check"
-                                        size={22}
-                                        color={
-                                            inputValue !== originalName
-                                                ? colors.primary
-                                                : "gray"
-                                        }
-                                    />
-                                </Pressable>
-                            </View>
-                        )}
+                        <View className="absolute right-0 top-0 bottom-0 justify-center items-center">
+                            <Pressable
+                                className="p-2 mr-2"
+                                onPressIn={() => {
+                                    isSaving.current = true;
+                                }}
+                                onPress={handleSave}
+                            >
+                                <Feather
+                                    className={isEditingName ? "" : "opacity-0"}
+                                    name="check"
+                                    size={22}
+                                    color={
+                                        inputValue !== originalName
+                                            ? colors.primary
+                                            : "gray"
+                                    }
+                                />
+                            </Pressable>
+                        </View>
                     </Pressable>
                 </View>
                 <View className="w-full opacity-60">
