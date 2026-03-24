@@ -2,13 +2,13 @@ import { View, ScrollView, TextInput, Pressable, Keyboard } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { useTheme } from "@/src/contexts/theme-context";
 import MenuElement from "@/src/components/MenuElement";
-import { useAuth } from "@/src/contexts/auth-context";
 import { useState, useRef, useEffect } from "react";
 import { useUpdateNameMutation } from "@/src/mutations/users.mutations";
+import { useCurrentUser } from "@/src/hooks/users.hooks";
 
 export default function AccountScreen() {
     const { colors } = useTheme();
-    const { user } = useAuth();
+    const { data: user } = useCurrentUser();
     const { updateName } = useUpdateNameMutation();
 
     const originalName =

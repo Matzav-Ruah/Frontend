@@ -26,13 +26,13 @@ export function useUpdateNameMutation() {
                     ...leaderboardPreviousData?.data,
                     activeUser: {
                         ...leaderboardPreviousData?.data.activeUser,
-                        username: `${data.first_name} ${data.last_name}`,
+                        ...data,
                     },
                     users: leaderboardPreviousData?.data.users.map((user) => {
                         if (user.id === userPreviousData?.id) {
                             return {
                                 ...user,
-                                username: `${data.first_name} ${data.last_name}`,
+                                ...data,
                             };
                         }
                         return user;
