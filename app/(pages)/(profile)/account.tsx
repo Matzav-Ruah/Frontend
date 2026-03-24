@@ -93,7 +93,7 @@ export default function AccountScreen() {
                     >
                         <TextInput
                             ref={inputRef}
-                            className="text-[16px] font-medium text-center"
+                            className="text-[18px] font-medium text-center"
                             style={{ color: colors.primary }}
                             value={inputValue}
                             onChangeText={setInputValue}
