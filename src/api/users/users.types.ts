@@ -20,9 +20,9 @@ export interface UserSchema {
     is_active: boolean;
 }
 
-export interface LoginCredentials extends SignInSchema { }
+export interface LoginCredentials extends SignInSchema {}
 
-export interface RegisterCredentials extends SignInSchema { }
+export interface RegisterCredentials extends SignInSchema {}
 
 export interface UserProfileSchema {
     id: number;
@@ -38,4 +38,9 @@ export interface LeaderboardSchema {
 
 export interface StreakSchema {
     streak_count: number;
+}
+
+export interface UpdateNameSchema {
+    first_name: string;
+    last_name: string;
 }
