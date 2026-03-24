@@ -21,16 +21,9 @@ import {
 } from "@/src/api/users/users.api";
 
 export const useCurrentUser = (
-    options?: Omit<
-        UseQueryOptions<
-            ApiResponse<UserSchema>,
-            ApiError,
-            ApiResponse<UserSchema>
-        >,
-        "queryKey" | "queryFn"
-    >,
+    options?: Omit<UseQueryOptions<UserSchema>, "queryKey" | "queryFn">,
 ) => {
-    return useQuery<ApiResponse<UserSchema>, ApiError>({
+    return useQuery<UserSchema>({
         queryKey: ["user", "current"],
         queryFn: async () => auth.getCurrentUser(),
         ...options,

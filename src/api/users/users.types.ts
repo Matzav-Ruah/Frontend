@@ -26,7 +26,8 @@ export interface RegisterCredentials extends SignInSchema {}
 
 export interface UserProfileSchema {
     id: number;
-    username: string;
+    first_name: string;
+    last_name?: string;
     streak_count: number;
 }
 

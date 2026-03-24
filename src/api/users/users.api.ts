@@ -46,14 +46,14 @@ export const logout = async (): Promise<ApiResponse<void>> => {
     return response.data;
 };
 
-export const getCurrentUser = async (): Promise<ApiResponse<UserSchema>> => {
+export const getCurrentUser = async (): Promise<UserSchema> => {
     const response = await apiClient.get<ApiResponse<UserSchema>>(
         API_CONFIG.ENDPOINTS.AUTH.CURRENT_USER,
     );
     if (response.data.success && response.data.data) {
         await setUser(response.data.data);
     }
-    return response.data;
+    return response.data.data;
 };
 
 export const getLeaderboard = async (): Promise<
