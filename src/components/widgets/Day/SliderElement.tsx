@@ -2,9 +2,8 @@ import { Text, View } from "react-native";
 import Slider from "@react-native-community/slider";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
-import * as Haptics from "expo-haptics";
+import { impactAsync, ImpactFeedbackStyle } from "expo-haptics";
 import { useTheme } from "@/src/contexts/theme-context";
-
 
 interface SliderElementProps {
     title: string;
@@ -14,7 +13,13 @@ interface SliderElementProps {
     color: string;
 }
 
-export default function SliderElement({ title, onUpdate, value, iconName, color }: SliderElementProps) {
+export default function SliderElement({
+    title,
+    onUpdate,
+    value,
+    iconName,
+    color,
+}: SliderElementProps) {
     const [localValue, setLocalValue] = useState(value);
     const { colors } = useTheme();
 
@@ -26,24 +31,40 @@ export default function SliderElement({ title, onUpdate, value, iconName, color 
         <View className="w-full mb-2">
             <View className="flex-row justify-between items-center mb-2 px-1">
                 <View className="flex-row items-center gap-2">
-                    {iconName && <MaterialCommunityIcons name={iconName} size={20} color={color} />}
-                    <Text className={`text-[15px] font-bold tracking-tight`} style={{ color }}>{title}</Text>
+                    {iconName && (
+                        <MaterialCommunityIcons
+                            name={iconName}
+                            size={20}
+                            color={color}
+                        />
+                    )}
+                    <Text
+                        className={`text-[15px] font-bold tracking-tight`}
+                        style={{ color }}
+                    >
+                        {title}
+                    </Text>
                 </View>
-                <View className="px-2.5 py-0.5 rounded-full" style={{ backgroundColor: colors.primary + "10" }}>
-                    <Text className="text-[12px] font-bold" style={{ color }}>{localValue}/5</Text>
+                <View
+                    className="px-2.5 py-0.5 rounded-full"
+                    style={{ backgroundColor: colors.primary + "10" }}
+                >
+                    <Text className="text-[12px] font-bold" style={{ color }}>
+                        {localValue}/5
+                    </Text>
                 </View>
             </View>
 
             <View className="bg-gray-50/50 rounded-2xl px-1 h-12 justify-center border border-gray-100/50">
                 <Slider
-                    style={{ width: '100%', height: 40 }}
+                    style={{ width: "100%", height: 40 }}
                     minimumValue={1}
                     maximumValue={5}
                     step={1}
                     value={localValue}
                     onValueChange={(val) => {
                         setLocalValue(val);
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
+                        impactAsync(ImpactFeedbackStyle.Soft);
                     }}
                     onSlidingComplete={(val) => onUpdate(val)}
                     minimumTrackTintColor={color}
@@ -52,5 +73,5 @@ export default function SliderElement({ title, onUpdate, value, iconName, color 
                 />
             </View>
         </View>
-    )
+    );
 }
