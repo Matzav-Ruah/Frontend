@@ -1,8 +1,6 @@
-import { TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { View } from "react-native";
-import { Text } from "react-native";
 import { ComponentProps } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "../contexts/theme-context";
 
 type FeatherIconName = ComponentProps<typeof Feather>["name"];
@@ -37,7 +35,14 @@ export default function MenuElement({
             onPress={onPress ? onPress : undefined}
         >
             <View className="flex-row items-center">
-                {iconLeft && <Feather name={iconLeft} size={22} color={iconLeftColor || colors.primary} className="mr-4" />}
+                {iconLeft && (
+                    <Feather
+                        name={iconLeft}
+                        size={22}
+                        color={iconLeftColor || colors.primary}
+                        className="mr-4"
+                    />
+                )}
                 <Text
                     className={`text-[16px] font-medium ${textStyle}`}
                     style={textStyle ? undefined : { color: colors.primary }}
@@ -45,7 +50,13 @@ export default function MenuElement({
                     {title}
                 </Text>
             </View>
-            {iconRight && <Feather name={iconRight} size={20} color={iconRightColor || colors.primary} />}
+            {iconRight && (
+                <Feather
+                    name={iconRight}
+                    size={20}
+                    color={iconRightColor || colors.primary}
+                />
+            )}
         </TouchableOpacity>
     );
 }
