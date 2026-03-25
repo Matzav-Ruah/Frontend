@@ -13,13 +13,16 @@ import {
 } from "@/src/api/users/users.types";
 import { getUser, removeUser, setUser } from "@/src/api/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { ApiResponse } from "../api/types";
 
 interface AuthContextType {
     user: UserSchema | null;
     isLoading: boolean;
     isAuthenticated: boolean;
-    login: (credentials: LoginCredentials) => Promise<void>;
-    register: (credentials: RegisterCredentials) => Promise<void>;
+    login: (credentials: LoginCredentials) => Promise<ApiResponse<UserSchema>>;
+    register: (
+        credentials: RegisterCredentials,
+    ) => Promise<ApiResponse<UserSchema>>;
     logout: () => Promise<void>;
     refreshUser: () => Promise<void>;
 }
@@ -93,15 +96,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     const login = useCallback(
-        async (credentials: LoginCredentials) => {
-            await loginMutation.mutateAsync(credentials);
+        async (
+            credentials: LoginCredentials,
+        ): Promise<ApiResponse<UserSchema>> => {
+            return await loginMutation.mutateAsync(credentials);
         },
         [loginMutation],
     );
 
     const register = useCallback(
-        async (credentials: RegisterCredentials) => {
-            await registerMutation.mutateAsync(credentials);
+        async (
+            credentials: RegisterCredentials,
+        ): Promise<ApiResponse<UserSchema>> => {
+            return await registerMutation.mutateAsync(credentials);
         },
         [registerMutation],
     );
